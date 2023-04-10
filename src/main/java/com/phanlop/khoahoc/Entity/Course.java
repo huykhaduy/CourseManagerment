@@ -1,5 +1,7 @@
 package com.phanlop.khoahoc.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -8,7 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -43,13 +46,16 @@ public class Course {
     @ManyToMany(mappedBy = "courses") // trỏ đến biến course ở User
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Collection<User> users;
+    @JsonBackReference
+    private List<User> users = new ArrayList<>();
 
     @CreatedBy
     @ManyToOne
     @JoinColumn(name = "user_id") // thông qua khóa ngoại user_id
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JsonBackReference
+    @JsonIgnore
     private User courseOwner;
 
 }

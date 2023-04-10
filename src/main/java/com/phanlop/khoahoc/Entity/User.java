@@ -1,6 +1,8 @@
 package com.phanlop.khoahoc.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,7 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -54,11 +57,13 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),  // TRong đó, khóa ngoại chính là user_id trỏ tới class hiện tại (User)
             inverseJoinColumns = @JoinColumn(name = "course_id") //Khóa ngoại thứ 2 trỏ tới id của (Course)
     )
-    private Collection<Course> courses;
+    private List<Course> courses = new ArrayList<>();
 
     @OneToMany(mappedBy = "courseOwner", cascade = CascadeType.ALL) // Trỏ đến tên biến courseOwner ở Course
     @EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
     @ToString.Exclude // Không sử dụng trong toString()
-    private Collection<Course> selfCourses;
+    @JsonManagedReference // Hỗ trợ json
+    @JsonIgnore
+    private List<Course> selfCourses;
 
 }

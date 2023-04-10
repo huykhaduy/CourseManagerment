@@ -1,4 +1,4 @@
-package com.phanlop.khoahoc.DAO;
+package com.phanlop.khoahoc.Repository;
 
 import com.phanlop.khoahoc.Entity.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
