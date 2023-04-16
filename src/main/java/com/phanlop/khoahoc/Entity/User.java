@@ -66,4 +66,18 @@ public class User {
     @JsonIgnore
     private List<Course> selfCourses;
 
+    @OneToMany(mappedBy = "submitOwner", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Submission> submissions;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Discussion> discussions;
+
 }

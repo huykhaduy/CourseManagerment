@@ -43,6 +43,7 @@ public class Course {
     @LastModifiedDate
     private Instant modifiedDate;
 
+    // User
     @ManyToMany(mappedBy = "courses") // trỏ đến biến course ở User
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -57,5 +58,35 @@ public class Course {
     @JsonBackReference
     @JsonIgnore
     private User courseOwner;
+
+    // Chapter
+    @OneToMany(mappedBy = "courseId")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Chapter> chapters;
+
+    // Homework
+    @OneToMany(mappedBy = "assignmentId")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Assignment> assignments;
+
+    // Announcement
+    @OneToMany(mappedBy = "course")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Announcement> announcements;
+
+    // Discussion
+    @OneToMany(mappedBy = "course")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Discussion> discussions;
+
+    // Invitation
+    @OneToMany(mappedBy = "course")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Invitation> invitations;
 
 }
