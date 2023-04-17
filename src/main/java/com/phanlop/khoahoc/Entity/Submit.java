@@ -1,7 +1,6 @@
 package com.phanlop.khoahoc.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,33 +15,28 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class Assignment {
+public class Submit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int assignId;
-    private String assignTitle;
+    private int submitId;
     @Column(columnDefinition = "TEXT")
-    private String assignDes;
+    private String submitContent;
     @CreatedDate
-    private Instant createdDate;
-    private Instant deadline;
+    private Instant submitAt;
 
-    // Khóa ngoại courseID
-    @ManyToOne @JoinColumn(name="course_id")
+    @ManyToOne @JoinColumn(name = "assign_id")
     @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
-    private Course course;
+    private Assignment assign;
 
-    // Khóa ngoại cho submit
-    @OneToMany(mappedBy = "assign", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
-    private Set<Submit> listSubmits = new HashSet<>();
+    @ManyToOne @JoinColumn(name = "user_id")
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
+    private User user;
 
-    // Tạo bảng AssignmentFile
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude @ToString.Exclude
-    @JoinTable(name="assginment_file",
-            joinColumns = @JoinColumn(name="assgin_id"),
+    @JoinTable(name="submit_file",
+            joinColumns = @JoinColumn(name="submit_id"),
             inverseJoinColumns = @JoinColumn(name="file_id")
     )
-    private Set<File> listFiles = new HashSet<>();
+    private Set<File> submitFiles = new HashSet<>();
 }

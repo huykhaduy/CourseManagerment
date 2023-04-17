@@ -3,45 +3,44 @@ package com.phanlop.khoahoc.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.List;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "File")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
+@EntityListeners(AuditingEntityListener.class)
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "fileId")
-    private UUID fileId;
+    private UUID fileID;
+    private String localUrl;
+    @CreatedDate
+    private Instant createdDate;
 
-    @Column(name = "fileName", nullable = false)
-    private String fileName;
+    // Khóa ngoại user_id
+    @ManyToOne @JoinColumn(name="user_id")
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
+    private User uploadedUser;
 
-    @Column(name = "fileDes")
-    private String fileDes;
+    // Tạo table SubmitFile
+    @ManyToMany(mappedBy="submitFiles")
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    private Set<Submit> listSubmits = new HashSet<>();
 
-    // Chapter
-    @ManyToMany(mappedBy = "chapter_files")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonBackReference
-    private List<Chapter> chapters;
+    // Tạo table ChapterDocument
+    @ManyToMany(mappedBy = "listDocuments")
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    private Set<Chapter> chapters = new HashSet<>();
 
-    // Assignment
-    @ManyToMany(mappedBy = "files")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonBackReference
-    private List<Assignment> homeworks;
-
-    // Submission
-    @ManyToOne
-    @JoinColumn(name = "submissionId")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Submission submission;
+    // Tạo table AssignmentFile
+    @ManyToMany(mappedBy = "listFiles")
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    private Set<Assignment> assignments = new HashSet<>();
 }

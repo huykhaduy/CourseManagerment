@@ -1,92 +1,67 @@
 package com.phanlop.khoahoc.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
-@Table(name = "Course")
-@EntityListeners(AuditingEntityListener.class)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Course {
     private static final String avtDefault = "https://cdn-icons-png.flaticon.com/512/4762/4762311.png";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "courseId")
-    private UUID courseId;
-
-    @Column(name="courseName", nullable = false)
+    private UUID courseID;
     private String courseName;
-
-    @Column(name="courseAvt", nullable = false)
     private String courseAvt = avtDefault;
-
-    @Column(name="courseDes")
     private String courseDes;
-
     @CreatedDate
-    @Column(updatable  = false)
-    private Instant createdDate;
-
+    private Instant createDate;
     @LastModifiedDate
     private Instant modifiedDate;
 
-    // User
-    @ManyToMany(mappedBy = "courses") // trỏ đến biến course ở User
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonBackReference
-    private List<User> users = new ArrayList<>();
+    // Bảng User_Course
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY) // Trỏ đến course ở UserCourse
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<UserCourse> userCourses = new HashSet<>();
 
-    @CreatedBy
+    // Thêm khóa user_id vào course
     @ManyToOne
-    @JoinColumn(name = "user_id") // thông qua khóa ngoại user_id
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonBackReference
-    @JsonIgnore
+    @JoinColumn(name = "user_id")
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
     private User courseOwner;
 
-    // Chapter
-    @OneToMany(mappedBy = "courseId")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<Chapter> chapters;
+    // Khóa ngoại cho Chapter
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<Chapter> listChapters = new HashSet<>();
 
-    // Homework
-    @OneToMany(mappedBy = "assignmentId")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<Assignment> assignments;
+    // Khóa ngoại cho Assignment
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<Assignment> listAssignments = new HashSet<>();
 
-    // Announcement
-    @OneToMany(mappedBy = "course")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<Announcement> announcements;
+    // Khóa ngoại cho Discuss
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<Discuss> listDiscuss = new HashSet<>();
 
-    // Discussion
-    @OneToMany(mappedBy = "course")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<Discussion> discussions;
+    // Khóa ngoại cho Invite
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<Invite> listInvite = new HashSet<>();
 
-    // Invitation
-    @OneToMany(mappedBy = "course")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private List<Invitation> invitations;
-
+    // Khóa ngoại cho Course
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<Notify> listNotify = new HashSet<>();
 }

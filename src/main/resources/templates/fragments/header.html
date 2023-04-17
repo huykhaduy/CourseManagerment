@@ -1,9 +1,15 @@
-<!--Default Footer-->
-<footer th:fragment="footer">
-    <p>&copy; 2020 Default Footer</p>
-</footer>
-
-<!--Admin Footer-->
-<footer th:fragment="admin-footer">
-    <p>&copy; 2020 Admin Footer</p>
-</footer>
+<div th:fragment="non-login-header">
+    <nav class="py-3 bg-light">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="page-icon">
+                <span class="bg-success text-light py-1 px-2 rounded">
+                    Course
+                </span>
+            </div>
+            <div>
+                <buttn class="btn outline-success" style="min-width: 120px">Đăng nhập</buttn>
+                <buttn class="btn btn-success" style="min-width: 120px">Đăng kí</buttn>
+            </div>
+        </div>
+    </nav>
+</div>

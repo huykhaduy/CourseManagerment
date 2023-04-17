@@ -1,47 +1,46 @@
 package com.phanlop.khoahoc.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.List;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "Chapter")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
+@EntityListeners(AuditingEntityListener.class)
 public class Chapter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chapterID")
-    private int chapterID;
-
-    @Column(name = "chapterTitle", nullable = false)
+    private int chapterId;
     private String chapterTitle;
+    @Column(columnDefinition = "TEXT") // Text trong database
+    private String chapterContent;
+    @CreatedDate
+    private Instant createDate;
+    @LastModifiedDate
+    private Instant modifiedDate;
 
-    @Column(name = "chapterDescription")
-    private String chapterDescription;
-
-    @Column(name = "isShown")
-    private boolean isShown = true;
-
-    // Course
+    // Khóa ngoại courseID
     @ManyToOne
-    @JoinColumn(name = "courseID")
-    @JsonBackReference
-    @JsonIgnore
-    private Course courseId;
+    @JoinColumn(name = "course_id")
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
+    private Course course;
 
-    // File
+    // Tạo table chapter document
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonBackReference
-    @JoinTable(name = "chapter_file",
-            joinColumns = @JoinColumn(name = "chapterID"),
-            inverseJoinColumns = @JoinColumn(name = "fileId")
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    @JoinTable(name = "chapter_document", // Tên table muốn tạo
+            joinColumns = @JoinColumn(name = "chapter_id"), // Tên cho bảng hiện tại
+            inverseJoinColumns = @JoinColumn(name = "file_id") // Tên cho bảng Course
     )
-    private List<File> chapter_files;
+    private Set<File> listDocuments = new HashSet<>();
+
 }

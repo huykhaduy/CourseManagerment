@@ -1,7 +1,5 @@
 package com.phanlop.khoahoc.Entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,74 +8,46 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "user")
-@EntityListeners(AuditingEntityListener.class)
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data // setter and getter
+@EntityListeners(AuditingEntityListener.class)
 public class User {
     private static final String defaultAvt = "https://img.freepik.com/free-icon/user_318-159711.jpg";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
-    @Column(name = "userId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
-    @Column(name="username", nullable = false, unique = true)
-    private String username;
-
-    @Column(name="password", nullable = false)
-    private String password;
-
-    @Column(name="email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name="userRole", nullable = false)
-    private UserRole userRole = UserRole.STUDENT;
-
-    @Column(name="avatar")
     private String avatar = defaultAvt;
-
-    @Column(updatable  = false)
+    private String email;
+    private String password;
+    private UserRole userRole;
     @CreatedDate
     private Instant createdDate;
-
     @LastModifiedDate
     private Instant modifiedDate;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude // Not using this property in Equal and Hash
-    @ToString.Exclude // And to string too
+    // Table User_Course
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<UserCourse> userCourses = new HashSet<>();
 
-    @JoinTable(name = "user_course", //Tạo ra một join Table tên là "user_course"
-            joinColumns = @JoinColumn(name = "user_id"),  // TRong đó, khóa ngoại chính là user_id trỏ tới class hiện tại (User)
-            inverseJoinColumns = @JoinColumn(name = "course_id") //Khóa ngoại thứ 2 trỏ tới id của (Course)
-    )
-    private List<Course> courses = new ArrayList<>();
+    // Khóa ngoại trỏ đến Course
+    @OneToMany(mappedBy = "courseOwner",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<Course> selfCourses = new HashSet<>();
 
-    @OneToMany(mappedBy = "courseOwner", cascade = CascadeType.ALL) // Trỏ đến tên biến courseOwner ở Course
-    @EqualsAndHashCode.Exclude // không sử dụng trường này trong equals và hashcode
-    @ToString.Exclude // Không sử dụng trong toString()
-    @JsonManagedReference // Hỗ trợ json
-    @JsonIgnore
-    private List<Course> selfCourses;
+    // Khóa ngoại cho Submit
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<Submit> selfSubmit = new HashSet<>();
 
-    @OneToMany(mappedBy = "submitOwner", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonManagedReference
-    @JsonIgnore
-    private List<Submission> submissions;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonManagedReference
-    @JsonIgnore
-    private List<Discussion> discussions;
-
+    // Khóa ngoại cho Discuss
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
+    private Set<Discuss> listDiscuss = new HashSet<>();
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/course")
@@ -21,15 +21,15 @@ public class CourseController {
     private UserRepository userRepository;
 
     @GetMapping
-    public List<Course> getCourseList() {
+    public Set<Course> getCourseList() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
         if (userDetails != null){
-            User user = userRepository.findByUsername(userDetails.getUsername());
+            User user = userRepository.findByEmail(userDetails.getUsername());
             if (user != null){
                 return user.getSelfCourses();
             }
         }
-        return Collections.emptyList();
+        return Collections.emptySet();
     }
 }

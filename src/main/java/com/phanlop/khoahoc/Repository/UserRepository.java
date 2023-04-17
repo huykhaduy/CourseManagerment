@@ -6,5 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "users", path = "users-api")
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
+    User findByEmail(String username);
 }
