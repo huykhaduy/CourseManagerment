@@ -1,6 +1,8 @@
 package com.phanlop.khoahoc;
 
 import com.phanlop.khoahoc.Entity.*;
+import com.phanlop.khoahoc.Enums.AccessType;
+import com.phanlop.khoahoc.Enums.UserRole;
 import com.phanlop.khoahoc.Repository.CourseRepository;
 import com.phanlop.khoahoc.Repository.UserCourseRepository;
 import com.phanlop.khoahoc.Repository.UserRepository;

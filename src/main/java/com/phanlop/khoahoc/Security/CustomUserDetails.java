@@ -1,7 +1,7 @@
 package com.phanlop.khoahoc.Security;
 
 import com.phanlop.khoahoc.Entity.User;
-import com.phanlop.khoahoc.Entity.UserRole;
+import com.phanlop.khoahoc.Enums.UserRole;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

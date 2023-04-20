@@ -2,6 +2,7 @@ package com.phanlop.khoahoc.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.phanlop.khoahoc.DTO.CourseDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,7 +17,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Course {
+public class Course implements IConvertToDTO<CourseDTO> {
     private static final String avtDefault = "https://cdn-icons-png.flaticon.com/512/4762/4762311.png";
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -64,4 +65,17 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
     private Set<Notify> listNotify = new HashSet<>();
+
+    @Override
+    public CourseDTO convertToDTO() {
+        CourseDTO courseDTO = new CourseDTO();
+        courseDTO.setCourseID(this.getCourseID());
+        courseDTO.setCourseName(this.getCourseName());
+        courseDTO.setCourseDes(this.getCourseDes());
+        courseDTO.setCourseAvt(this.getCourseAvt());
+        courseDTO.setCreatedDate(this.getCreateDate());
+        courseDTO.setModifiedDate(this.getModifiedDate());
+        courseDTO.setCourseOwner(this.getCourseOwner().convertToDTO());
+        return courseDTO;
+    }
 }

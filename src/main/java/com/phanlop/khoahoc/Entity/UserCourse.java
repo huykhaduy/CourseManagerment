@@ -1,6 +1,7 @@
 package com.phanlop.khoahoc.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.phanlop.khoahoc.Enums.AccessType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
