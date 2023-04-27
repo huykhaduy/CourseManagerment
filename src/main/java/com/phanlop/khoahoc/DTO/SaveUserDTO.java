@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserDTO {
+public class SaveUserDTO {
     private static final String defaultAvt = "https://img.freepik.com/free-icon/user_318-159711.jpg";
-    @Null
     private Long userId;
 
-    @NotEmpty(message="FullName không hợp lệ")
+    @NotEmpty(message="Full Name không hợp lệ")
     private String fullName;
 
     @Email(message = "Email không hợp lệ")

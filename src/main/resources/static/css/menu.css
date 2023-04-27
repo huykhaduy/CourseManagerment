@@ -1,0 +1,31 @@
+.left-menu{
+    padding: 16px 12px !important;
+    min-width: 104px !important;
+    position: sticky;
+    left: 0;
+    top: 74px;
+    height: fit-content;
+}
+
+.left-menu-item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 12px 0;
+    border-radius: 15px;
+    color: #1a1a1a;
+    margin: 8px 0;
+
+}
+
+.left-menu-item.active{
+    background-color: #e8ebed;
+}
+
+.left-menu-item:hover{
+    background-color: #e8ebed;
+    transition: all 0.3s linear;
+}

@@ -1,14 +1,14 @@
 package com.phanlop.khoahoc.Service;
 
-import com.phanlop.khoahoc.DTO.CreateUserDTO;
+import com.phanlop.khoahoc.DTO.SaveUserDTO;
 
 import java.util.Set;
 import java.util.UUID;
 
 public interface UserServices {
-    CreateUserDTO createUser(CreateUserDTO createUserDTO);
-    CreateUserDTO updateUser(Long userID, CreateUserDTO createUserDTO);
+    SaveUserDTO createUser(SaveUserDTO saveUserDTO);
+    SaveUserDTO updateUser(Long userID, SaveUserDTO saveUserDTO);
     void removeUser(Long userID);
-    CreateUserDTO getUserByID(Long userID);
-    Set<CreateUserDTO> getUsersInCourse(UUID courseID);
+    SaveUserDTO getUserByID(Long userID);
+    Set<SaveUserDTO> getUsersInCourse(UUID courseID);
 }

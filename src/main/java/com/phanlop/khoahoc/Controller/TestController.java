@@ -5,10 +5,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value = "/test")
 public class TestController {
-    @GetMapping
+    @GetMapping("/test")
     public String getTestPage() {
         return "test";
+    }
+
+    @GetMapping("/discuss")
+    public String getDiscussPage() {
+        return "discuss";
     }
 }

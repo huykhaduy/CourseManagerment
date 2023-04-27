@@ -1,12 +1,13 @@
-package com.phanlop.khoahoc.Service;
+package com.phanlop.khoahoc.Service.implementation;
 
-import com.phanlop.khoahoc.DTO.CreateCourseDTO;
-import com.phanlop.khoahoc.DTO.CreateUserDTO;
+import com.phanlop.khoahoc.DTO.SaveCourseDTO;
+import com.phanlop.khoahoc.DTO.SaveUserDTO;
 import com.phanlop.khoahoc.Entity.Course;
 import com.phanlop.khoahoc.Entity.User;
 import com.phanlop.khoahoc.Entity.UserCourse;
 import com.phanlop.khoahoc.Repository.CourseRepository;
 import com.phanlop.khoahoc.Repository.UserCourseRepository;
+import com.phanlop.khoahoc.Service.CourseServices;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -14,31 +15,31 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+//@Service
 @RequiredArgsConstructor
-public class CourseServicesImpl implements CourseServices{
+public class CourseServicesImpl implements CourseServices {
     private final CourseRepository courseRepository;
     private final UserCourseRepository userCourseRepository;
     private final ModelMapper modelMapper;
 
 
     @Override
-    public CreateCourseDTO createCourse(CreateCourseDTO course) {
+    public SaveCourseDTO createCourse(SaveCourseDTO course) {
         try {
             Course courseSaved = courseRepository.save(modelMapper.map(course, Course.class));
-            return modelMapper.map(courseSaved, CreateCourseDTO.class);
-        } catch (Exception e){
+            return modelMapper.map(courseSaved, SaveCourseDTO.class);
+        } catch (IllegalArgumentException  e){
             System.out.println(e.toString());
             return null;
         }
     }
 
     @Override
-    public CreateCourseDTO updateCourse(UUID courseId, CreateCourseDTO course) {
+    public SaveCourseDTO updateCourse(UUID courseId, SaveCourseDTO course) {
         try {
             course.setCourseID(courseId);
             Course courseUpdated = courseRepository.save(modelMapper.map(course, Course.class));
-            return modelMapper.map(courseUpdated, CreateCourseDTO.class);
+            return modelMapper.map(courseUpdated, SaveCourseDTO.class);
         } catch (Exception e){
             System.out.println(e.toString());
             return null;
@@ -52,19 +53,19 @@ public class CourseServicesImpl implements CourseServices{
     }
 
     @Override
-    public CreateCourseDTO getCourseByID(UUID courseId) {
+    public SaveCourseDTO getCourseByID(UUID courseId) {
         Course course = courseRepository.findByCourseID(courseId);
         if (course == null)
             return null;
-        return modelMapper.map(course, CreateCourseDTO.class);
+        return modelMapper.map(course, SaveCourseDTO.class);
     }
 
     @Override
-    public Set<CreateCourseDTO> getCourseOfUser(CreateUserDTO user) {
+    public Set<SaveCourseDTO> getCourseOfUser(SaveUserDTO user) {
         List<UserCourse> list = userCourseRepository.findByUser(modelMapper.map(user, User.class));
-        Set<CreateCourseDTO> createCourseDTOList = list.stream().
-                map(userCourse -> modelMapper.map(user, CreateCourseDTO.class))
+        Set<SaveCourseDTO> saveCourseDTOList = list.stream().
+                map(userCourse -> modelMapper.map(user, SaveCourseDTO.class))
                 .collect(Collectors.toSet());
-        return createCourseDTOList;
+        return saveCourseDTOList;
     }
 }

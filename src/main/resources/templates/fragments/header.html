@@ -1,15 +1,82 @@
-<div th:fragment="non-login-header">
-    <nav class="py-3 bg-light">
-        <div class="container d-flex justify-content-between align-items-center">
-            <div class="page-icon">
-                <span class="bg-success text-light py-1 px-2 rounded">
-                    Course
-                </span>
+<nav th:fragment="non-login-header" class="navbar navbar-expand-md nav-bg-white py-2 position-sticky" style="top:0;left:0">
+    <div class="container justify-content-start">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand mx-md-0 mx-3" href="/">
+            <div class="d-flex align-items-center">
+                <img th:src="@{/img/f9.png}" class="nav-logo-icon">
+                <p class="nav-logo-text">Khóa học trực tuyến</p>
             </div>
-            <div>
-                <buttn class="btn outline-success" style="min-width: 120px">Đăng nhập</buttn>
-                <buttn class="btn btn-success" style="min-width: 120px">Đăng kí</buttn>
+        </a>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <div class="input-group ms-md-auto d-flex form-search">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                </div>
+                <input class="form-control me-2" type="text" placeholder="Tìm kiếm khóa học ..." aria-label="Search">
+            </div>
+            <div class="ms-md-auto login-group">
+                <a class="btn btn-login nav-btn-text" href="/login"> Đăng nhập </a>
+                <a class="btn btn-signup nav-btn-text" href="/signup"> Đăng kí </a>
             </div>
         </div>
-    </nav>
-</div>
+    </div>
+</nav>
+
+<nav th:fragment="logined-header" class="navbar navbar-expand-md nav-bg-white py-2 position-sticky bg-white" style="top:0;left:0">
+    <div class="container justify-content-start">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand mx-md-0 mx-3" href="/">
+            <div class="d-flex align-items-center">
+                <img th:src="@{/img/f9.png}" class="nav-logo-icon">
+                <p class="nav-logo-text">Khóa học trực tuyến</p>
+            </div>
+        </a>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <div class="input-group ms-md-auto d-flex form-search position-relative">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                </div>
+                <input class="form-control me-2 form-search-input" type="text" placeholder="Tìm kiếm khóa học ..." aria-label="Search">
+                <div class="d-none popup-search position-absolute">
+                    <ul class="list-group">
+                        <li class="list-item">
+                            <a href="/test" class="d-flex align-items-center">
+                                <img class="search-item-img" src="https://cdn-icons-png.flaticon.com/512/4762/4762311.png">
+                                <div class="search-item-name text-dark mx-2">Hello world</div>
+                            </a>
+                        </li>
+                        <li class="list-item">
+                            <a href="/test" class="d-flex align-items-center">
+                                <img class="search-item-img" src="https://cdn-icons-png.flaticon.com/512/4762/4762311.png">
+                                <div class="search-item-name text-dark mx-2">Hello world</div>
+                            </a>
+                        </li>
+                        <li class="list-item">
+                            <a href="/test" class="d-flex align-items-center">
+                                <img class="search-item-img" src="https://cdn-icons-png.flaticon.com/512/4762/4762311.png">
+                                <div class="search-item-name text-dark mx-2">Hello world</div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="ms-md-auto login-group">
+                <div class="btn-group d-flex align-items-center">
+                    <button type="button" class="btn btn-danger dropdown-toggle header-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" style="width: 25px; height: 25px">
+                        <div class="header-username text-dark mx-2">Huỳnh Khánh Duy</div>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item text-small" href="#">Thông tin tài khoản</a></li>
+                        <li><a class="dropdown-item text-small" href="#">Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
