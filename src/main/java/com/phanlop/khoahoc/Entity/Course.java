@@ -59,8 +59,23 @@ public class Course {
     @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
     private Set<Invite> listInvite = new HashSet<>();
 
-    // Khóa ngoại cho Course
+    // Khóa ngoại cho Notify
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
     private Set<Notify> listNotify = new HashSet<>();
+
+    // Tạo table chapter document
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JoinTable(name = "course_document", // Tên table muốn tạo
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id")
+    )
+    private Set<File> listDocuments = new HashSet<>();
+
+    // Khóa ngoại tới Department
+    @ManyToOne @JoinColumn(name="department_id")
+    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
+    private Department department;
 }

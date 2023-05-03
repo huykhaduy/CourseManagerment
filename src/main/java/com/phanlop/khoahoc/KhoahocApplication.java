@@ -5,91 +5,119 @@ package com.phanlop.khoahoc;
 //import com.phanlop.khoahoc.Enums.UserRole;
 //import com.phanlop.khoahoc.Service.implementation.CourseServicesImpl;
 //import com.phanlop.khoahoc.Service.implementation.UserServicesImpl;
+import com.phanlop.khoahoc.DTO.CourseDTO;
+import com.phanlop.khoahoc.DTO.UserDTO;
+import com.phanlop.khoahoc.Entity.*;
+import com.phanlop.khoahoc.Repository.*;
+import com.phanlop.khoahoc.Security.CustomUserDetails;
+import com.phanlop.khoahoc.Service.implementation.CourseServicesImpl;
+import com.phanlop.khoahoc.Service.implementation.UserServicesImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.Properties;
 
 @SpringBootApplication
 @EnableJpaAuditing // Cái này để lưu ngày createDate với modifiedDate - đừng quan tâm
 @AllArgsConstructor
-public class KhoahocApplication{
-//	private final CourseRepository courseRepository;
-//	private final UserRepository userRepository;
-////	private final UserCourseRepository userCourseRepository;
-//	private final UserServicesImpl userServices;
-//	private CourseServicesImpl courseServices;
-//	private final PasswordEncoder passwordEncoder;
-
-
-//	public KhoahocApplication(@Autowired CourseRepository courseRepository, @Autowired UserRepository userRepository){
-//		this.userRepository = userRepository;
-//		this.courseRepository = courseRepository;
-//	}
+public class KhoahocApplication implements CommandLineRunner{
+	private final PasswordEncoder passwordEncoder;
+	private final UserRepository userRepository;
+	private final CourseRepository courseRepository;
+	private final DepartmentRepository departmentRepository;
+	private final NotifyRepository notifyRepository;
+	private final InviteRepository inviteRepository;
+	private final ChapterRepository chapterRepository;
+	private final RoleRepository roleRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(KhoahocApplication.class, args);
 	}
 
-//	@Transactional
-//	@Override
-//	public void run(String... args) throws Exception {
-		// Tạo user sở hữu course
-//		User user = new User();
-//		user.setPassword(passwordEncoder.encode("12345"));
-//		user.setEmail("duy@gmail.com");
-//		user.setUserRole(UserRole.ADMIN);
-//		this.userRepository.saveAndFlush(user);
-//
-//		// Tạo student trong course
-//		User student = new User();
-//		student.setPassword(passwordEncoder.encode("123"));
-//		student.setEmail("stu@gmail.com");
-//		student.setUserRole(UserRole.STUDENT);
-//		this.userRepository.save(student);
-//
-//		Course course = new Course();
-//		course.setCourseName("Khoa hoc Java Spring");
-//		course.setCourseDes("Hoc Spring Boot truc tuyen nhanh chong");
-//		course.setCourseOwner(user);
-//		courseRepository.save(course);
-//
-//		UserCourse userCourse = new UserCourse();
-//		userCourse.setAccessType(AccessType.PENDING);
-//		userCourse.setUser(student);
-//		userCourse.setCourse(course);
-//
-//		userCourseRepository.saveAndFlush(userCourse);
+	@Override
+	public void run(String... args) throws Exception {
+		initializeData();
+	}
 
+	@Transactional
+	public void initializeData(){
+		// Tạo các role
+		Role role = new Role();
+		role.setRoleId(1);
+		role.setRoleName("ROLE_ADMIN");
 
-		// Thêm vào bảng user_course
-//		course.getUserCourses().add(student);
-//		student.getCourses().add(course);
-//		// Chỉ cần lưu 1 bên là được
-//		userRepository.saveAndFlush(student);
+		Role role2 = new Role();
+		role2.setRoleId(2);
+		role2.setRoleName("ROLE_STUDENT");
 
-//		courseRepository.findAll().forEach(item ->{
-//			System.out.println(item.getCourseID());
-//			System.out.println(item.getCourseName());
-//			System.out.println(item.getCourseOwner());
-//		});
+		Role role3 = new Role();
+		role3.setRoleId(3);
+		role3.setRoleName("ROLE_TEACHER");
+		roleRepository.save(role);
+		roleRepository.save(role2);
+		roleRepository.save(role3);
 
-//		SaveUserDTO saveUserDTO = new SaveUserDTO();
-//		saveUserDTO.setFullName("Course User");
-//		saveUserDTO.setUserRole(UserRole.STUDENT);
-//		saveUserDTO.setEmail("hello world");
-//		saveUserDTO.setPassword(passwordEncoder.encode("12345"));
-//		userServices.createUser(saveUserDTO);
-//
-//		SaveCourseDTO saveCourseDTO = new SaveCourseDTO();
-//		saveCourseDTO.setCourseName("Khóa học lập trình");
-//		SaveUserDTO userOwner = userServices.getUserByID(1L);
-//		saveCourseDTO.setCourseOwner(userOwner);
-//		SaveCourseDTO saved = courseServices.createCourse(saveCourseDTO);
-//		System.out.println(saved.getCourseID());
-//		System.out.println(saved.getCourseName());
-//	}
+		// Tạo user
+		User adminUser = new User();
+		adminUser.setUserId(1L);
+		adminUser.setFullName("Duy Huynh");
+		adminUser.setEmail("duy@gmail.com");
+		adminUser.setAvatar(UserDTO.defaultAvt);
+		adminUser.setPassword(passwordEncoder.encode("123456"));
+		adminUser.getListRoles().add(role);
+		role.getListUsers().add(adminUser);
+		userRepository.save(adminUser);
+		roleRepository.save(role);
+
+		User guest = new User();
+		guest.setUserId(2L);
+		guest.setFullName("Guest");
+		guest.setAvatar(UserDTO.defaultAvt);
+		guest.setEmail("duy2@gmail.com");
+		guest.setPassword(passwordEncoder.encode("123456"));
+		guest.getListRoles().add(role2);
+		role2.getListUsers().add(guest);
+		userRepository.save(guest);
+		roleRepository.save(role2);
+
+		Department cntt = new Department();
+		cntt.setDepartmentName("Công nghệ thông tin");
+		departmentRepository.save(cntt);
+
+		// Tạo các course
+		for (int i=0;i<10;i++){
+			Course course = new Course();
+			course.setCourseOwner(adminUser);
+			course.setCourseName("Khóa học thứ "+i);
+			course.setDepartment(cntt);
+			course.setCourseAvt(CourseDTO.avtDefault);
+			courseRepository.save(course);
+			for (int j=0;j<5;j++){
+				Chapter chapter = new Chapter();
+				chapter.setChapterTitle(i+".Xin chào thế giới");
+				chapter.setCourse(course);
+				chapterRepository.save(chapter);
+			}
+			Notify newNotify = new Notify();
+			newNotify.setNotiTitle("Xin chào course");
+			newNotify.setCourse(course);
+
+			Invite invite1 = new Invite();
+			invite1.setInviteEmail("du@gmail.com");
+			invite1.setCourse(course);
+			notifyRepository.save(newNotify);
+			inviteRepository.save(invite1);
+		}
+
+	}
 }

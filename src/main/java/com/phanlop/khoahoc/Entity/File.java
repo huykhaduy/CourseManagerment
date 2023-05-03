@@ -34,10 +34,10 @@ public class File {
     @EqualsAndHashCode.Exclude @ToString.Exclude
     private Set<Submit> listSubmits = new HashSet<>();
 
-    // Tạo table ChapterDocument
+    // Tạo table CourseDocument
     @ManyToMany(mappedBy = "listDocuments")
     @EqualsAndHashCode.Exclude @ToString.Exclude
-    private Set<Chapter> chapters = new HashSet<>();
+    private Set<Course> chapters = new HashSet<>();
 
     // Tạo table AssignmentFile
     @ManyToMany(mappedBy = "listFiles")

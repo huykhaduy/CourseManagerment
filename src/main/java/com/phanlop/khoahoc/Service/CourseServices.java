@@ -1,15 +1,16 @@
 package com.phanlop.khoahoc.Service;
 
-import com.phanlop.khoahoc.DTO.SaveCourseDTO;
-import com.phanlop.khoahoc.DTO.SaveUserDTO;
+import com.phanlop.khoahoc.Entity.Course;
+import com.phanlop.khoahoc.Entity.User;
 
 import java.util.Set;
 import java.util.UUID;
 
 public interface CourseServices {
-    SaveCourseDTO createCourse(SaveCourseDTO course);
-    SaveCourseDTO updateCourse(UUID courseId, SaveCourseDTO course);
-    void removeCourse(UUID courseId);
-    SaveCourseDTO getCourseByID(UUID courseId);
-    Set<SaveCourseDTO> getCourseOfUser(SaveUserDTO user);
+    Course createCourse(Course course);
+    Course updateCourse(UUID courseId, Course course);
+    Course removeCourse(UUID courseId);
+    Course getCourseByID(UUID courseId);
+    Set<Course> getCourseOfUser(User user);
+    Set<Course> getAllCourse();
 }

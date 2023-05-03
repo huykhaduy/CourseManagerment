@@ -20,7 +20,10 @@ public class Chapter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int chapterId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int chapterSort;
     private String chapterTitle;
+    private String chapterVideo;
     @Column(columnDefinition = "TEXT") // Text trong database
     private String chapterContent;
     @CreatedDate
@@ -33,14 +36,4 @@ public class Chapter {
     @JoinColumn(name = "course_id")
     @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
     private Course course;
-
-    // Tạo table chapter document
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude @ToString.Exclude
-    @JoinTable(name = "chapter_document", // Tên table muốn tạo
-            joinColumns = @JoinColumn(name = "chapter_id"), // Tên cho bảng hiện tại
-            inverseJoinColumns = @JoinColumn(name = "file_id") // Tên cho bảng Course
-    )
-    private Set<File> listDocuments = new HashSet<>();
-
 }

@@ -1,31 +1,40 @@
 package com.phanlop.khoahoc.Security;
 
+import com.phanlop.khoahoc.Entity.Role;
 import com.phanlop.khoahoc.Entity.User;
-import com.phanlop.khoahoc.Enums.UserRole;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 @AllArgsConstructor
+@Getter
 public class CustomUserDetails implements UserDetails {
     private User user;
 
+    @Transactional
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (user.getUserRole() == UserRole.STUDENT){
-            return Collections.singleton(new SimpleGrantedAuthority("ROLE_STUDENT"));
+//        if (user.getListRoles() == UserRole.STUDENT){
+//            return Collections.singleton(new SimpleGrantedAuthority("ROLE_STUDENT"));
+//        }
+//        if (user.getUserRole() == UserRole.TEACHER){
+//            return Collections.singleton(new SimpleGrantedAuthority("ROLE_TEACHER"));
+//        }
+//        if (user.getUserRole() == UserRole.ADMIN){
+//            return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//        }
+//        return Collections.singleton(null);
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        Set<Role> userRoles = user.getListRoles();
+        for (Role role : userRoles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
         }
-        if (user.getUserRole() == UserRole.TEACHER){
-            return Collections.singleton(new SimpleGrantedAuthority("ROLE_TEACHER"));
-        }
-        if (user.getUserRole() == UserRole.ADMIN){
-            return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }
-        return Collections.singleton(null);
+        return authorities;
     }
 
     @Override

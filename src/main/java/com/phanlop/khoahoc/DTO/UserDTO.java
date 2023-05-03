@@ -1,16 +1,19 @@
 package com.phanlop.khoahoc.DTO;
 
-import com.phanlop.khoahoc.Enums.UserRole;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class SaveUserDTO {
-    private static final String defaultAvt = "https://img.freepik.com/free-icon/user_318-159711.jpg";
+@AllArgsConstructor
+public class UserDTO {
+    public static final String defaultAvt = "https://img.freepik.com/free-icon/user_318-159711.jpg";
     private Long userId;
 
     @NotEmpty(message="Full Name không hợp lệ")
@@ -23,6 +26,6 @@ public class SaveUserDTO {
     @NotEmpty(message = "Thiếu password")
     @Size(min = 3, message = "Password phải từ 3 kí tự trở lên")
     private String password;
-
-    private UserRole userRole = UserRole.STUDENT;
+    private Instant createdDate;
+    private Instant modifiedDate;
 }

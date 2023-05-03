@@ -18,6 +18,7 @@ public class UserCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userCourseId;
+    private double processPoint;
     @CreatedDate
     private Instant dateJoined;
     private AccessType accessType;

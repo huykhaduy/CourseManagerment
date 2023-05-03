@@ -1,7 +1,6 @@
 package com.phanlop.khoahoc.Entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.phanlop.khoahoc.Enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,7 +25,6 @@ public class User {
     private String fullName;
     private String email;
     private String password;
-    private UserRole userRole;
     @CreatedDate
     private Instant createdDate;
     @LastModifiedDate
@@ -51,4 +49,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
     private Set<Discuss> listDiscuss = new HashSet<>();
+
+    // Khóa ngoại cho bảng UserRole
+    @ManyToMany(mappedBy = "listUsers", fetch = FetchType.EAGER)
+    @EqualsAndHashCode.Exclude @ToString.Exclude
+    private Set<Role> listRoles = new HashSet<>();
 }
