@@ -7,16 +7,20 @@ import com.phanlop.khoahoc.Entity.UserCourse;
 import com.phanlop.khoahoc.Repository.CourseRepository;
 import com.phanlop.khoahoc.Repository.UserCourseRepository;
 import com.phanlop.khoahoc.Service.CourseServices;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CourseServicesImpl implements CourseServices {
     private final CourseRepository courseRepository;
     private final UserCourseRepository userCourseRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Course createCourse(Course course) {
@@ -46,22 +50,24 @@ public class CourseServicesImpl implements CourseServices {
     }
 
     @Override
-    public Set<Course> getCourseOfUser(User user) {
-        Set<UserCourse> userCourses = userCourseRepository.findByUser(user);
-        Set<Course> courses = new HashSet<>();
-        for (UserCourse item : userCourses) {
-            courses.add(item.getCourse());
-        }
-        return courses;
+    public List<Course> getCourseOfUser(User user) {
+        return userCourseRepository.findAllByUserOrderByDateJoinedDesc(user).stream()
+                .map(UserCourse::getCourse).collect(Collectors.toList());
     }
 
     @Override
-    public Set<Course> getAllCourse() {
-        return new HashSet<>(courseRepository.findAll());
+    public Page<Course> getCourseOfUser(User user, Pageable pageable) {
+        Page<UserCourse> userCourses = userCourseRepository.findAllByUserOrderByDateJoinedDesc(user, pageable);
+        return userCourses.map(UserCourse::getCourse);
     }
 
     @Override
-    public Set<Department> getDepartments(Set<Course> courses) {
+    public List<Course> getAllCourse() {
+        return courseRepository.findAll();
+    }
+
+    @Override
+    public Set<Department> getDepartments(List<Course> courses) {
         Set<Department> departments = new HashSet<>();
         for (Course item : courses) {
             departments.add(item.getDepartment());

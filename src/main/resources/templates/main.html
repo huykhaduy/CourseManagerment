@@ -28,13 +28,13 @@
                 <h4>Khóa học của bạn</h4>
                 <form method="get">
                     <select class="form-select form-department-select" name="khoa" onchange="this.form.submit()">
-                        <option th:if="${param.page eq 0}" value="0" selected>Tất cả</option>
-                        <option th:if="${param.page neq 0}" value="0">Tất cả</option>
+                        <option th:if="${khoaId == 0}" value="0" selected>Tất cả</option>
+                        <option th:if="${khoaId != 0}" value="0">Tất cả</option>
                         <th:block th:each="department :${departments}">
-                            <th:block th:if="${param.page eq department.departmentId}">
+                            <th:block th:if="${khoaId == department.departmentId}">
                                 <option th:value="${department.departmentId}" th:text="${department.departmentName}" selected></option>
                             </th:block>
-                            <th:block th:if="${param.page neq department.departmentId}">
+                            <th:block th:if="${khoaId != department.departmentId}">
                                 <option th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
                             </th:block>
                         </th:block>

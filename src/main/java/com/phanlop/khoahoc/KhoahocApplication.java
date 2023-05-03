@@ -39,6 +39,7 @@ public class KhoahocApplication implements CommandLineRunner{
 	private final InviteRepository inviteRepository;
 	private final ChapterRepository chapterRepository;
 	private final RoleRepository roleRepository;
+	private UserCourseRepository userCourseRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(KhoahocApplication.class, args);
@@ -91,17 +92,24 @@ public class KhoahocApplication implements CommandLineRunner{
 		roleRepository.save(role2);
 
 		Department cntt = new Department();
+		cntt.setDepartmentId(1);
 		cntt.setDepartmentName("Công nghệ thông tin");
 		departmentRepository.save(cntt);
 
 		// Tạo các course
-		for (int i=0;i<10;i++){
+		for (int i=0;i<20;i++){
 			Course course = new Course();
 			course.setCourseOwner(adminUser);
 			course.setCourseName("Khóa học thứ "+i);
 			course.setDepartment(cntt);
 			course.setCourseAvt(CourseDTO.avtDefault);
 			courseRepository.save(course);
+
+			UserCourse userCourse = new UserCourse();
+			userCourse.setCourse(course);
+			userCourse.setUser(guest);
+			userCourseRepository.save(userCourse);
+
 			for (int j=0;j<5;j++){
 				Chapter chapter = new Chapter();
 				chapter.setChapterTitle(i+".Xin chào thế giới");

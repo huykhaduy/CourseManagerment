@@ -19,6 +19,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class CourseController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
-    public Set<Course> getAllCourse() {
+    public List<Course> getAllCourse() {
         return courseServices.getAllCourse();
     }
 
@@ -52,7 +53,7 @@ public class CourseController {
     public Set<CourseDTO> getUserCourses(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userServices.getUserByID(userDetails.getUser().getUserId());
-        Set<Course> userCoures = courseServices.getCourseOfUser(user);
+        List<Course> userCoures = courseServices.getCourseOfUser(user);
         Set<CourseDTO> setDTO = userCoures.stream().map(
                 course -> modelMapper.map(course, CourseDTO.class)).collect(Collectors.toSet());
         return setDTO;
