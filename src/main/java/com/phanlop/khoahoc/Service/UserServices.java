@@ -11,4 +11,5 @@ public interface UserServices {
     User removeUser(Long userID);
     User getUserByID(Long userID);
     Set<User> getUsersInCourse(Course course);
+    User findByUsername(String username);
 }

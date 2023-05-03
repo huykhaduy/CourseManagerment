@@ -1,4 +1,4 @@
-<nav th:fragment="non-login-header" class="navbar navbar-expand-md nav-bg-white py-2 position-sticky" style="top:0;left:0">
+<nav th:unless="${#authorization.expression('isAuthenticated()')}" th:fragment="non-login-header" class="navbar navbar-expand-md nav-bg-white py-2 position-sticky" style="top:0;left:0">
     <div class="container justify-content-start">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -24,7 +24,7 @@
     </div>
 </nav>
 
-<nav th:fragment="logined-header" class="navbar navbar-expand-md nav-bg-white py-2 position-sticky bg-white" style="top:0;left:0">
+<nav th:if="${#authorization.expression('isAuthenticated()')}" th:fragment="logined-header" class="navbar navbar-expand-md nav-bg-white py-2 position-sticky bg-white" style="top:0;left:0">
     <div class="container justify-content-start">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -42,6 +42,7 @@
                 </div>
                 <input class="form-control me-2 form-search-input" type="text" placeholder="Tìm kiếm khóa học ..." aria-label="Search">
                 <div class="d-none popup-search position-absolute">
+                    <h6 class="text-dark ms-4">Các khóa học phù hợp</h6>
                     <ul class="list-group">
                         <li class="list-item">
                             <a href="/test" class="d-flex align-items-center">
@@ -68,7 +69,7 @@
                 <div class="btn-group d-flex align-items-center">
                     <button type="button" class="btn btn-danger dropdown-toggle header-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://img.freepik.com/free-icon/user_318-159711.jpg" style="width: 25px; height: 25px">
-                        <div class="header-username text-dark mx-2">Huỳnh Khánh Duy</div>
+                        <div class="header-username text-dark mx-2" sec:authentication="name"></div>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item text-small" href="#">Thông tin tài khoản</a></li>

@@ -72,13 +72,14 @@ a{
 .popup-search{
     top: 110%;
     width: 100%;
-    background: white;
+    background: rgba(255, 255, 255, 0.97);
     border: 1px solid #e8ebed;
     padding: 10px 0;
     box-shadow: 0 -4px 32px rgba(0,0,0,.2);
     border-radius: 8px;
-    max-height: 400px;
+    max-height: 300px;
     z-index: 10;
+    overflow: auto;
 }
 
 .search-item-img{
@@ -91,13 +92,16 @@ a{
 .search-item-name{
     font-size: 0.9rem;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .popup-search .list-item{
     padding: 10px 25px;
-    /*border: 1px solid #e8ebed;*/
-    /*margin: 5px;*/
-    /*border-radius: 10px;*/
+    border: 1px solid #e8ebed;
+    margin: 5px 15px;
+    border-radius: 5px;
 }
 
 /*.popup-search .list-item:nth-last-child(1){*/

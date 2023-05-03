@@ -1,6 +1,7 @@
 package com.phanlop.khoahoc.Service;
 
 import com.phanlop.khoahoc.Entity.Course;
+import com.phanlop.khoahoc.Entity.Department;
 import com.phanlop.khoahoc.Entity.User;
 
 import java.util.Set;
@@ -13,4 +14,6 @@ public interface CourseServices {
     Course getCourseByID(UUID courseId);
     Set<Course> getCourseOfUser(User user);
     Set<Course> getAllCourse();
+
+    Set<Department> getDepartments(Set<Course> courses);
 }

@@ -47,7 +47,7 @@ public class CourseController {
         return user.getSelfCourses().stream().map(selfCourse ->(
                 modelMapper.map(selfCourse, CourseDTO.class))).collect(Collectors.toSet());
     }
-    
+
     @GetMapping("/joined")
     public Set<CourseDTO> getUserCourses(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

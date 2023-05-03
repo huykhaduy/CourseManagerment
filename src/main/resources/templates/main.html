@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>F9 - Khóa học trực tuyến</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel = "icon" th:href="@{/img/f9.png}" type = "image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/menu.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header}"></div>
+<div class="content d-flex">
+    <div th:replace="~{fragments/menu :: left-menu}"></div>
+    <div class="w-100">
+        <div class="course-wrapper">
+            <div class="d-flex justify-content-between mb-3">
+                <h4>Khóa học của bạn</h4>
+                <form method="get">
+                    <select class="form-select form-department-select" name="khoa" onchange="this.form.submit()">
+                        <option th:if="${param.page eq 0}" value="0" selected>Tất cả</option>
+                        <option th:if="${param.page neq 0}" value="0">Tất cả</option>
+                        <th:block th:each="department :${departments}">
+                            <th:block th:if="${param.page eq department.departmentId}">
+                                <option th:value="${department.departmentId}" th:text="${department.departmentName}" selected></option>
+                            </th:block>
+                            <th:block th:if="${param.page neq department.departmentId}">
+                                <option th:value="${department.departmentId}" th:text="${department.departmentName}"></option>
+                            </th:block>
+                        </th:block>
+                    </select>
+                </form>
+            </div>
+
+            <div th:if="${#lists.isEmpty(courses)}" class="course-empty py-4 d-none justify-content-center align-items-center flex-column">
+                <img class="img-fluid" th:src="@{/img/empty.svg}" style="max-width: 480px; width:100%">
+                <div class="mt-4">Chưa tham gia khóa học nào</div>
+            </div>
+            <div th:if="${not #lists.isEmpty(courses)}" class="course-list d-flex flex-wrap">
+                <th:block th:each="course : ${courses}">
+                    <a href="/test" class="course-item">
+                        <img src="https://files.fullstack.edu.vn/f8-prod/courses/7.png" class="img-fluid">
+                        <h6 class="mt-3 text-dark" th:text="${course.courseName}"></h6>
+                        <p class="text-small m-0 text-muted" th:text="${course.department.departmentName}"></p>
+                    </a>
+                </th:block>
+<!--                <a href="/test" class="course-item">-->
+<!--                    <img src="https://files.fullstack.edu.vn/f8-prod/courses/21/63e1bcbaed1dd.png" class="img-fluid">-->
+<!--                    <h6 class="mt-3 text-dark">Lập Trình C# Cơ Bản</h6>-->
+<!--                    <p class="text-small m-0 text-muted">Huỳnh Khánh Duy</p>-->
+<!--                </a>-->
+<!--                <a href="/test" class="course-item">-->
+<!--                    <img src="https://files.fullstack.edu.vn/f8-prod/courses/7.png" class="img-fluid">-->
+<!--                    <h6 class="mt-3 text-dark">Kiến Thức Nhập Môn IT</h6>-->
+<!--                    <p class="text-small m-0 text-muted">Huỳnh Khánh Duy</p>-->
+<!--                </a>-->
+<!--                <a href="/test" class="course-item">-->
+<!--                    <img src="https://files.fullstack.edu.vn/f8-prod/courses/7.png" class="img-fluid">-->
+<!--                    <h6 class="mt-3 text-dark">Kiến Thức Nhập Môn IT</h6>-->
+<!--                    <p class="text-small m-0 text-muted">Huỳnh Khánh Duy</p>-->
+<!--                </a>-->
+<!--                <a href="/test" class="course-item">-->
+<!--                    <img src="https://files.fullstack.edu.vn/f8-prod/courses/7.png" class="img-fluid">-->
+<!--                    <h6 class="mt-3 text-dark">Kiến Thức Nhập Môn IT</h6>-->
+<!--                    <p class="text-small m-0 text-muted">Huỳnh Khánh Duy</p>-->
+<!--                </a>-->
+<!--                <a href="/test" class="course-item">-->
+<!--                    <img src="https://files.fullstack.edu.vn/f8-prod/courses/7.png" class="img-fluid">-->
+<!--                    <h6 class="mt-3 text-dark">Kiến Thức Nhập Môn IT</h6>-->
+<!--                    <p class="text-small m-0 text-muted">Huỳnh Khánh Duy</p>-->
+<!--                </a>-->
+<!--                <a href="/test" class="course-item">-->
+<!--                    <img src="https://files.fullstack.edu.vn/f8-prod/courses/7.png" class="img-fluid">-->
+<!--                    <h6 class="mt-3 text-dark">Kiến Thức Nhập Môn IT</h6>-->
+<!--                    <p class="text-small m-0 text-muted">Huỳnh Khánh Duy</p>-->
+<!--                </a>-->
+<!--                <a href="/test" class="course-item">-->
+<!--                    <img src="data:image/jpeg;base64,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" class="img-fluid">-->
+<!--                    <h6 class="mt-3 text-dark">Kiến Thức Nhập Môn IT</h6>-->
+<!--                    <p class="text-small m-0 text-muted">Huỳnh Khánh Duy</p>-->
+<!--                </a>-->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+</body>
+</html>

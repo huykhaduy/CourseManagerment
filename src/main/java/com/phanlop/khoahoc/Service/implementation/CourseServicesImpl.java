@@ -1,6 +1,7 @@
 package com.phanlop.khoahoc.Service.implementation;
 
 import com.phanlop.khoahoc.Entity.Course;
+import com.phanlop.khoahoc.Entity.Department;
 import com.phanlop.khoahoc.Entity.User;
 import com.phanlop.khoahoc.Entity.UserCourse;
 import com.phanlop.khoahoc.Repository.CourseRepository;
@@ -57,5 +58,14 @@ public class CourseServicesImpl implements CourseServices {
     @Override
     public Set<Course> getAllCourse() {
         return new HashSet<>(courseRepository.findAll());
+    }
+
+    @Override
+    public Set<Department> getDepartments(Set<Course> courses) {
+        Set<Department> departments = new HashSet<>();
+        for (Course item : courses) {
+            departments.add(item.getDepartment());
+        }
+        return departments;
     }
 }

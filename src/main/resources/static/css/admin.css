@@ -1,0 +1,72 @@
+a{
+    text-decoration: none;
+    color: black;
+}
+
+li{
+    list-style-type: none;
+}
+
+.slide-nav{
+    width: 250px;
+    height: 100%;
+    background: #007bff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px 30px;
+}
+
+.nav-links{
+    position: relative;
+}
+
+.nav-links li a{
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.nav-links li a i{
+    font-size: 18px;
+    width: 30px;
+}
+
+.content{
+    padding-left: 250px;
+    height: 100vh;
+}
+
+.course-manager-section{
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.course-manager-section .dropdown-toggle::after {
+    display: none;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+.course-header{
+    font-weight: bold;
+}
+
+.course-item img{
+    width: 50px;
+    height: 50px;
+}
