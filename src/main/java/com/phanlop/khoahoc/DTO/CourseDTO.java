@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseDTO {
-    public static final String avtDefault = "https://cdn-icons-png.flaticon.com/512/4762/4762311.png";
+    public static final String avtDefault = "https://files.fullstack.edu.vn/f8-prod/courses/7.png";
     private UUID courseID;
     @NotBlank(message = "Tên khóa học không được trống")
     private String courseName;

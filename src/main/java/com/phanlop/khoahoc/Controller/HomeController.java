@@ -7,7 +7,6 @@ import com.phanlop.khoahoc.Entity.User;
 import com.phanlop.khoahoc.Security.CustomUserDetails;
 import com.phanlop.khoahoc.Service.implementation.CourseServicesImpl;
 import com.phanlop.khoahoc.Service.implementation.UserServicesImpl;
-import com.phanlop.khoahoc.Utils.PaginatedCourseResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -18,10 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,25 +30,28 @@ public class HomeController {
     @GetMapping("/")
     public String getHomePage(Authentication authentication, Model model,
                               @RequestParam(required = false, defaultValue = "0") Integer khoa,
-                              Pageable pageable) {
+                              @RequestParam(required = false, defaultValue = "1") Integer page) throws Exception {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userServices.findByUsername(userDetails.getUsername());
 
-        Page<Course> coursePages = courseServices.getCourseOfUser(user, pageable);
-        Page<CourseDTO> courseDTOPages = coursePages.map(item->modelMapper.map(item, CourseDTO.class));
-
+        List<Course> listCourses = courseServices.getCourseOfUser(user);
         // Thể loại DTO Department
-        Set<DepartmentDTO> departments = modelMapper.map(courseServices.getDepartments(coursePages.getContent()),
+        Set<DepartmentDTO> departments = modelMapper.map(courseServices.getDepartments(listCourses),
                 new TypeToken<Set<DepartmentDTO>>(){}.getType());
+        if (khoa != 0)
+            listCourses = courseServices.filterCourseDepartments(listCourses, khoa);
 
-        PaginatedCourseResponse pagination = PaginatedCourseResponse.builder()
-                .numberOfItems(courseDTOPages.getTotalElements())
-                        .courseList(courseDTOPages.getContent())
-                                .numberOfPages(courseDTOPages.getTotalPages()).build();
+        int totalPages = courseServices.getTotalPage(listCourses, 16);
+        if (page > totalPages ) throw new Exception();
+        listCourses = courseServices.getCourseAtPage(listCourses, page-1, 16);
+        List<CourseDTO> listCourseDTOs = modelMapper.map(listCourses, new TypeToken<List<CourseDTO>>(){}.getType());
 
-        model.addAttribute("courses", pagination.getCourseList());
+        model.addAttribute("courses", listCourseDTOs);
         model.addAttribute("departments", departments);
         model.addAttribute("khoaId", khoa);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+
         return "main";
     }
 

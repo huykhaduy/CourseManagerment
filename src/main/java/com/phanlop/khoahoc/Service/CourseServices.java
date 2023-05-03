@@ -23,5 +23,10 @@ public interface CourseServices {
     List<Course> getAllCourse();
 
     Set<Department> getDepartments(List<Course> courses);
+    List<Course> queryCourseOfUser(User user, String query);
+
+    List<Course> filterCourseDepartments(List<Course> courses, Integer departmentId);
+    List<Course> getCourseAtPage(List<Course> courses, int page, int perPage);
+    int getTotalPage(List<Course> courses, int perPage);
 
 }

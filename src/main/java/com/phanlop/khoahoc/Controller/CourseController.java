@@ -90,4 +90,11 @@ public class CourseController {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @GetMapping("/query")
+    public List<CourseDTO> queryCourse(Authentication authentication, @RequestParam String search){
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userServices.getUserByID(userDetails.getUser().getUserId());
+        return courseServices.queryCourseOfUser(user, search).stream().map(item->modelMapper.map(item, CourseDTO.class)).toList();
+    }
 }

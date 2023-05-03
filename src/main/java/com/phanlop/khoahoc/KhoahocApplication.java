@@ -96,12 +96,19 @@ public class KhoahocApplication implements CommandLineRunner{
 		cntt.setDepartmentName("Công nghệ thông tin");
 		departmentRepository.save(cntt);
 
+		Department laptrinh = new Department();
+		laptrinh.setDepartmentId(2);
+		laptrinh.setDepartmentName("Lập trình ứng dụng");
+		departmentRepository.save(laptrinh);
 		// Tạo các course
 		for (int i=0;i<20;i++){
 			Course course = new Course();
 			course.setCourseOwner(adminUser);
 			course.setCourseName("Khóa học thứ "+i);
-			course.setDepartment(cntt);
+			if (i%2==0)
+				course.setDepartment(cntt);
+			else
+				course.setDepartment(laptrinh);
 			course.setCourseAvt(CourseDTO.avtDefault);
 			courseRepository.save(course);
 

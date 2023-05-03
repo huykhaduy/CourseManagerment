@@ -97,11 +97,15 @@ a{
     text-overflow: ellipsis;
 }
 
-.popup-search .list-item{
+.list-item{
     padding: 10px 25px;
     border: 1px solid #e8ebed;
     margin: 5px 15px;
     border-radius: 5px;
+}
+
+.popup-search{
+    display: none;
 }
 
 /*.popup-search .list-item:nth-last-child(1){*/

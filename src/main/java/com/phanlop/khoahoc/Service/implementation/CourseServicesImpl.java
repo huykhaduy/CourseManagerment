@@ -74,4 +74,37 @@ public class CourseServicesImpl implements CourseServices {
         }
         return departments;
     }
+
+    @Override
+    public List<Course> queryCourseOfUser(User user, String query) {
+        List<Course> listCourse = this.getCourseOfUser(user);
+        List<Course> returnList = new ArrayList<>();
+        for (Course c : listCourse) {
+            if (c.getCourseName().contains(query)){
+                returnList.add(c);
+            }
+        }
+        return returnList;
+    }
+
+    @Override
+    public List<Course> filterCourseDepartments(List<Course> courses, Integer departmentId) {
+        return courses.stream().filter(c->c.getDepartment().getDepartmentId().equals(departmentId)).toList();
+    }
+
+    @Override
+    public List<Course> getCourseAtPage(List<Course> courses, int page, int perPage) {
+        int maxPage = getTotalPage(courses, perPage);
+        if (page>=maxPage) page=0;
+        List<Course> pageCourses = new ArrayList<>();
+        for (int i=page*perPage; i<courses.size() && i<(page+1)*perPage; i++){
+            pageCourses.add(courses.get(i));
+        }
+        return pageCourses;
+    }
+
+    @Override
+    public int getTotalPage(List<Course> courses, int perPage) {
+        return (int) Math.ceil(courses.size()*1.0/perPage);
+    }
 }
