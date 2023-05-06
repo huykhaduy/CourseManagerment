@@ -8,7 +8,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -54,4 +56,8 @@ public class User {
     @ManyToMany(mappedBy = "listUsers", fetch = FetchType.EAGER)
     @EqualsAndHashCode.Exclude @ToString.Exclude
     private Set<Role> listRoles = new HashSet<>();
+
+    // Khoá ngoại cho user
+    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments = new ArrayList<>();
 }

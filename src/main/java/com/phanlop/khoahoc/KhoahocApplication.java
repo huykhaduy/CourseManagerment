@@ -25,7 +25,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 @SpringBootApplication
 @EnableJpaAuditing // Cái này để lưu ngày createDate với modifiedDate - đừng quan tâm
@@ -40,6 +42,7 @@ public class KhoahocApplication implements CommandLineRunner{
 	private final ChapterRepository chapterRepository;
 	private final RoleRepository roleRepository;
 	private UserCourseRepository userCourseRepository;
+	private EnrollmentRepository enrollmentRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(KhoahocApplication.class, args);
@@ -132,7 +135,13 @@ public class KhoahocApplication implements CommandLineRunner{
 			invite1.setCourse(course);
 			notifyRepository.save(newNotify);
 			inviteRepository.save(invite1);
-		}
 
+			Enrollment enrollment = new Enrollment();
+			Enrollment.EnrollmentId id = new Enrollment.EnrollmentId();
+			id.setCourse(course);
+			id.setUser(guest);
+			enrollment.setId(id);
+			enrollmentRepository.save(enrollment);
+		}
 	}
 }

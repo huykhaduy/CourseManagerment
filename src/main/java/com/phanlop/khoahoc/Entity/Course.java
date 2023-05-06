@@ -78,4 +78,8 @@ public class Course {
     @ManyToOne @JoinColumn(name="department_id")
     @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
     private Department department;
+
+
+    @OneToMany(mappedBy = "id.course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Enrollment> enrollments = new ArrayList<>();
 }
