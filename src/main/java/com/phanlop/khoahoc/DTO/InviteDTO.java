@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class InviteDTO {
-    private Long inviteId;
+    private UUID inviteId;
     @NotEmpty(message = "Email không được trống")
     private String inviteEmail;
     private Instant createdDate;

@@ -12,7 +12,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindException;
@@ -40,7 +39,7 @@ public class CourseController {
         return courseServices.getAllCourse();
     }
 
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
     @GetMapping("/own")
     public Set<CourseDTO> getOwnCourse(Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -60,15 +59,19 @@ public class CourseController {
     }
 
     @GetMapping("/get/{courseId}")
-    public ResponseEntity<CourseDTO> getCourse(@PathVariable String courseId){
+    public ResponseEntity<CourseDTO> getCourse(Authentication authentication, @PathVariable String courseId){
         Course course = courseServices.getCourseByID(UUID.fromString(courseId));
         if (course != null){
-            return ResponseEntity.ok().body(modelMapper.map(course, CourseDTO.class));
+            if (courseServices.isOwned(authentication, course) || courseServices.isJoined(authentication, course)){
+                return ResponseEntity.ok().body(modelMapper.map(course, CourseDTO.class));
+            }
+
         }
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping({"/add", "/edit"})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/add")
     public ResponseEntity<CourseDTO> addCourse(@RequestBody @Valid CourseDTO coursedto, BindingResult bindingResult) throws BindException {
         if (bindingResult.hasErrors()){
             throw new BindException(bindingResult);
@@ -82,10 +85,36 @@ public class CourseController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/delete/{courseId}")
-    public ResponseEntity<CourseDTO> deleteCourse(@PathVariable String courseId){
-        Course course = courseServices.removeCourse(UUID.fromString(courseId));
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/edit")
+    public ResponseEntity<CourseDTO> editCourse(Authentication authentication, @RequestBody @Valid CourseDTO coursedto, BindingResult bindingResult) throws BindException {
+        if (bindingResult.hasErrors()){
+            throw new BindException(bindingResult);
+        }
+
+        Course course = courseServices.getCourseByID(coursedto.getCourseID());
         if (course != null){
+            if (courseServices.isOwned(authentication, course)){
+                Course updateCourse = modelMapper.map(coursedto, Course.class);
+                Optional<Department> department = departmentRepository.findById(coursedto.getDepartment().getDepartmentId());
+                if (department.isPresent()){
+                    updateCourse.setDepartment(department.get());
+                    return ResponseEntity.ok(modelMapper.map(courseServices.createCourse(updateCourse), CourseDTO.class));
+                }
+                else {
+                    throw new BindException(bindingResult);
+                }
+            }
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/delete/{courseId}")
+    public ResponseEntity<CourseDTO> deleteCourse(Authentication authentication, @PathVariable String courseId){
+        Course course = courseServices.getCourseByID(UUID.fromString(courseId));
+        if (course != null && courseServices.isOwned(authentication, course)){
+            courseServices.removeCourse(UUID.fromString(courseId));
             return ResponseEntity.ok().body(modelMapper.map(course, CourseDTO.class));
         }
         return ResponseEntity.badRequest().build();

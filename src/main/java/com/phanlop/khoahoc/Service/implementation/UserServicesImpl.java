@@ -8,9 +8,13 @@ import com.phanlop.khoahoc.Repository.UserRepository;
 import com.phanlop.khoahoc.Service.UserServices;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -61,5 +65,11 @@ public class UserServicesImpl implements UserServices {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByEmail(username);
+    }
+
+    @Override
+    public boolean isAdmin(Authentication authentication) {
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        return authorities.stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
     }
 }

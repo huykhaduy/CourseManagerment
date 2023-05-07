@@ -79,7 +79,6 @@ public class Course {
     @EqualsAndHashCode.Exclude @ToString.Exclude @JsonBackReference
     private Department department;
 
-
-    @OneToMany(mappedBy = "id.course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments = new ArrayList<>();
 }

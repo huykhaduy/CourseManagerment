@@ -58,6 +58,6 @@ public class User {
     private Set<Role> listRoles = new HashSet<>();
 
     // Khoá ngoại cho user
-    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Enrollment> enrollments = new ArrayList<>();
 }

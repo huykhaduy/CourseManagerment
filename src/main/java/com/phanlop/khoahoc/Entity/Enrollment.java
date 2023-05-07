@@ -7,6 +7,9 @@ import org.springframework.data.annotation.CreatedDate;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -17,22 +20,21 @@ public class Enrollment {
     @CreatedDate
     private Instant enrollmentDate;
 
-    // getters and setters
+    @ManyToOne
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @MapsId("courseId")
+    @JoinColumn(name = "course_id")
+    private Course course;
 
     @Embeddable
     @Data
     public static class EnrollmentId implements Serializable {
-//        @Column(name = "student_id")
-//        private Long studentId;
-//
-//        @Column(name = "course_id")
-//        private Long courseId;
-        @ManyToOne(fetch = FetchType.LAZY)
-        private Course course;
-
-        @ManyToOne(fetch = FetchType.LAZY)
-        private User user;
-        // getters and setters, equals() and hashCode()
+        private Long userId;
+        private UUID courseId;
     }
 }
 

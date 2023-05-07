@@ -6,11 +6,14 @@ import com.phanlop.khoahoc.Entity.User;
 import com.phanlop.khoahoc.Entity.UserCourse;
 import com.phanlop.khoahoc.Repository.CourseRepository;
 import com.phanlop.khoahoc.Repository.UserCourseRepository;
+import com.phanlop.khoahoc.Repository.UserRepository;
+import com.phanlop.khoahoc.Security.CustomUserDetails;
 import com.phanlop.khoahoc.Service.CourseServices;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,16 +23,11 @@ import java.util.stream.Collectors;
 public class CourseServicesImpl implements CourseServices {
     private final CourseRepository courseRepository;
     private final UserCourseRepository userCourseRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
     @Override
     public Course createCourse(Course course) {
-        return courseRepository.save(course);
-    }
-
-    @Override
-    public Course updateCourse(UUID courseId, Course course) {
-        course.setCourseID(courseId);
         return courseRepository.save(course);
     }
 
@@ -106,5 +104,39 @@ public class CourseServicesImpl implements CourseServices {
     @Override
     public int getTotalPage(List<Course> courses, int perPage) {
         return (int) Math.ceil(courses.size()*1.0/perPage);
+    }
+
+    @Override
+    public boolean isOwned(Authentication auth, Course course) {
+        if (course == null) return false;
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        return course.getCourseOwner().getUserId().equals(user.getUserId());
+    }
+
+    @Override
+    public boolean isOwned(Authentication auth, UUID courseId) {
+        Course course = this.getCourseByID(courseId);
+        return isOwned(auth,course);
+    }
+
+    @Override
+    public boolean isJoined(Authentication auth, Course course) {
+        if (course == null) return false;
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        Set<UserCourse> userCourses = userCourseRepository.findByCourse(course);
+        for (UserCourse userCourse : userCourses) {
+            if (userCourse.getUser().getUserId().equals(user.getUserId())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isJoined(Authentication auth, UUID courseId) {
+        Course course = this.getCourseByID(courseId);
+        return isJoined(auth,course);
     }
 }

@@ -136,11 +136,21 @@ public class KhoahocApplication implements CommandLineRunner{
 			notifyRepository.save(newNotify);
 			inviteRepository.save(invite1);
 
+//			Enrollment enrollment = new Enrollment();
+//			Enrollment.EnrollmentId id = new Enrollment.EnrollmentId();
+//			id.setCourseId(course.getCourseID());
+//			id.setUserId(guest.getUserId());
+//			enrollment.setId(id);
+//			enrollment.setUser(guest);
+//			enrollment.setCourse(course);
+//			enrollmentRepository.save(enrollment);
+			Enrollment.EnrollmentId enrollmentId = new Enrollment.EnrollmentId();
+			enrollmentId.setUserId(guest.getUserId());
+			enrollmentId.setCourseId(course.getCourseID());
 			Enrollment enrollment = new Enrollment();
-			Enrollment.EnrollmentId id = new Enrollment.EnrollmentId();
-			id.setCourse(course);
-			id.setUser(guest);
-			enrollment.setId(id);
+			enrollment.setId(enrollmentId);
+			enrollment.setUser(guest);
+			enrollment.setCourse(course);
 			enrollmentRepository.save(enrollment);
 		}
 	}

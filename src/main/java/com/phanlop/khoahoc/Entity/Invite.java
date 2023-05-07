@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -15,8 +16,8 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 public class Invite {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long inviteId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID inviteId;
     private String inviteEmail;
     @CreatedDate
     private Instant createdDate;
