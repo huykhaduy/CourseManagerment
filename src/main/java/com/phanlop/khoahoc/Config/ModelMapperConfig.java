@@ -1,4 +1,4 @@
-package com.phanlop.khoahoc.Controller.Config;
+package com.phanlop.khoahoc.Config;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
