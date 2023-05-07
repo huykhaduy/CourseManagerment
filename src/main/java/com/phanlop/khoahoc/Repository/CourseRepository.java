@@ -10,7 +10,5 @@ import java.awt.print.Pageable;
 import java.util.List;
 import java.util.UUID;
 
-@RepositoryRestResource(collectionResourceRel = "courses", path = "courses-api")
 public interface CourseRepository extends JpaRepository<Course, UUID> {
-
 }

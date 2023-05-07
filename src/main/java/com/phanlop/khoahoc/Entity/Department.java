@@ -8,8 +8,8 @@ import java.util.Set;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString(exclude = {"listCourses"})
+@EqualsAndHashCode(exclude = {"listCourses"})
 public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,5 @@ public class Department {
     private String departmentName;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude @ToString.Exclude @JsonManagedReference
     private Set<Course> listCourses;
-
 }

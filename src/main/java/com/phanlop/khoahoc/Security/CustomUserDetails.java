@@ -19,16 +19,6 @@ public class CustomUserDetails implements UserDetails {
     @Transactional
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        if (user.getListRoles() == UserRole.STUDENT){
-//            return Collections.singleton(new SimpleGrantedAuthority("ROLE_STUDENT"));
-//        }
-//        if (user.getUserRole() == UserRole.TEACHER){
-//            return Collections.singleton(new SimpleGrantedAuthority("ROLE_TEACHER"));
-//        }
-//        if (user.getUserRole() == UserRole.ADMIN){
-//            return Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"));
-//        }
-//        return Collections.singleton(null);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         Set<Role> userRoles = user.getListRoles();
         for (Role role : userRoles) {

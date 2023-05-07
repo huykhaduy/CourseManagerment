@@ -1,4 +1,4 @@
-package com.phanlop.khoahoc.Enums;
+package com.phanlop.khoahoc.Entity;
 
 public enum AccessType {
     PENDING,
