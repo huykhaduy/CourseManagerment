@@ -1,13 +1,14 @@
 package com.phanlop.khoahoc.Service;
 
 import com.phanlop.khoahoc.Entity.Chapter;
-import org.springframework.security.core.Authentication;
+import com.phanlop.khoahoc.Entity.Course;
+
+import java.util.List;
 
 public interface ChapterServices {
-    public Chapter createChapter(Chapter chapter);
-    public Chapter removeChapter(int chapterId);
-    public Chapter getChapter(int chapterId);
-
-    public boolean isOwned(Authentication auth, Chapter chapter);
-    public boolean isJoined(Authentication auth, Chapter chapter);
+    List<Chapter> getAllChapters();
+    Chapter getChapterById(int chapterId);
+    Chapter saveChapter(Chapter chapter);
+    void deleteChapter(int chapterId);
+    List<Chapter> getChaptersByCourse(Course course);
 }

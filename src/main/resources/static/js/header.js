@@ -4,10 +4,10 @@ $("#input-search-box").on('input',(function(){
         $("#popup-search-box").css("display", "none");
         $("#list-data-search").html("");
         $.ajax({
-            url: "/course/query",
+            url: "/course/search",
             method: "GET",
             data:{
-                search: inputValue
+                text: inputValue
             },
             success: function(data) {
                 if (!data.length) return;
@@ -15,7 +15,7 @@ $("#input-search-box").on('input',(function(){
                 $("#popup-search-box").css("display", "block");
                 let html = data.map(item=>{
                     return `<li class="list-item">
-                                <a href="/course/${item.courseID}" class="d-flex align-items-center">
+                                <a href="/detail/${item.courseID}" class="d-flex align-items-center">
                                     <img class="search-item-img" src="${item.courseAvt}">
                                     <div class="search-item-name text-dark mx-2">${item.courseName}</div>
                                 </a>

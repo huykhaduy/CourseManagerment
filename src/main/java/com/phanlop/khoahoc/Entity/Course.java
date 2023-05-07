@@ -25,7 +25,7 @@ public class Course {
     private UUID courseID;
     @NotBlank(message = "Tên khóa học không được trống")
     private String courseName;
-    private String courseAvt;
+    private String courseAvt = avtDefault;
     private String courseDes;
     @CreatedDate
     private Instant createDate;

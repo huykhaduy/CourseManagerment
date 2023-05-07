@@ -1,36 +1,25 @@
 package com.phanlop.khoahoc.Service;
 
 import com.phanlop.khoahoc.Entity.Course;
-import com.phanlop.khoahoc.Entity.Department;
 import com.phanlop.khoahoc.Entity.User;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public interface CourseServices {
-    Course createCourse(Course course);
-    Course removeCourse(UUID courseId);
-    Course getCourseByID(UUID courseId);
+    List<Course> getAllCourses();
+    Course getCourseById(UUID courseId);
+    Course saveCourse(Course course);
+    void deleteCourse(UUID courseId);
+    Page<Course> filterByUserAndDepartment(int departmentId, User user, int pageNo, int pageSize);
 
-    List<Course> getCourseOfUser(User user);
+    Page<Course> filterByUserAndDepartmentAdmin(int departmentId, User user, int pageNo, int pageSize);
 
-    Page<Course> getCourseOfUser(User user, Pageable pageable);
-
-    List<Course> getAllCourse();
-
-    Set<Department> getDepartments(List<Course> courses);
-    List<Course> queryCourseOfUser(User user, String query);
-
-    List<Course> filterCourseDepartments(List<Course> courses, Integer departmentId);
-    List<Course> getCourseAtPage(List<Course> courses, int page, int perPage);
-    int getTotalPage(List<Course> courses, int perPage);
-
-    boolean isOwned(Authentication auth, Course course);
-    boolean isOwned(Authentication auth, UUID courseId);
-    boolean isJoined(Authentication auth, Course course);
-    boolean isJoined(Authentication auth, UUID courseId);
+    // Filter course
+    boolean isOwned(Course course, Long userId);
+    boolean isAccess(Course course, Long userId);
+    List<Course> filterOwnedByUser(List<Course> courses, Long userId);
+    List<Course> filterAccessByUser(List<Course> courses, Long userId);
+    List<Course> filterBySearch(User user, String search);
 }

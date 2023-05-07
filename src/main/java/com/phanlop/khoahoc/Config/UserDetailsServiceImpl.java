@@ -1,4 +1,4 @@
-package com.phanlop.khoahoc.Security;
+package com.phanlop.khoahoc.Config;
 
 import com.phanlop.khoahoc.Entity.User;
 import com.phanlop.khoahoc.Repository.UserRepository;

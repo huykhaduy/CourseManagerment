@@ -124,6 +124,7 @@ public class KhoahocApplication implements CommandLineRunner{
 			Enrollment enrollment = new Enrollment();
 			enrollment.setId(enrollmentId);
 			enrollment.setUser(guest);
+			enrollment.setAccessType(AccessType.ACCEPT);
 			enrollment.setCourse(course);
 			enrollmentRepository.save(enrollment);
 		}
