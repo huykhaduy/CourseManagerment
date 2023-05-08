@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>F9 - Khóa học trực tuyến</title>
+    <title th:text="'F9 - ' + ${course.courseName}"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel = "icon" th:href="@{/img/f9.png}" type = "image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,17 +14,132 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/menu.css}">
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/style1.css}">
+    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.1.1-web/css/all.min.css}">
 </head>
 <body>
 
 <div th:replace="~{fragments/header}"></div>
 <div class="content d-flex">
     <div th:replace="~{fragments/menu :: left-menu}"></div>
-    <div class="w-100">
-        Hello world
+    <div class="w-100 d-flex mx-auto">
+        <div class="container_center">
+            <h1 style="font-size: 35px; margin-top: 50px; margin-bottom: 33px;"><span th:text="${course.courseName}"></span></h1>
+            <span style="font-size: 18px;" th:text="${course.courseDes}">Trong khóa này chúng ta sẽ cùng nhau xây dựng giao diện 2 trang web là The Band & Shopee.</span>
+            <h2 style="font-size: 20px; margin-top: 48px;">Bạn sẽ học được gì?</h2>
+            <div class="course_help">
+                <div class="help_left">
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Biết cách xây dựng giao diện web với HTML, CSS</span>
+                    </div>
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Biết cách đặt tên class CSS theo chuẩn BEM</span>
+                    </div>
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Làm chủ Flexbox khi dựng bố cục website</span>
+                    </div>
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Biết cách tự tạo động lực cho bản thân</span>
+                    </div>
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Học được cách làm UI chỉn chu, kỹ tính</span>
+                    </div>
+                </div>
+                <div class="help_right">
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Biết cách phân tích giao diện website</span>
+                    </div>
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Biết cách làm giao diện web responsive</span>
+                    </div>
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Sở hữu 2 giao diện web khi học xong khóa học</span>
+                    </div>
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Biết cách tự học những kiến thức mới</span>
+                    </div>
+                    <div class="help_content-1">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Nhận chứng chỉ khóa học do F8 cấp</span>
+                    </div>
+                </div>
+            </div>
+            <h2 style="font-size: 20px; margin-bottom: 25px;">Nội dung khóa học</h2>
+            <span style="font-size: 18px;"><span style="font-weight: 500;" th:text="${#lists.size(chapters)}">[Số lượng bài học]</span> bài học • Thời lượng <span style="font-weight: 500;">[Tổng thời gian]</span> phút</span>
+            <div class="course_list_video">
+                <div class="list_video"  th:each="chapter : ${chapters}">
+                    <a class="list_title">
+                        <i class="fa-solid fa-circle-play"></i>
+                        <span th:text="${chapter.chapterTitle}">[Chapter Title]</span>
+                    </a>
+                    <span class="list_time">[Time]</span>
+                </div>
+            </div>
+            <span style="font-size: 20px; font-weight: 550;">Yêu cầu</span>
+            <div class="container_request">
+                <div class="request-content">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Máy vi tính kết nối internet (Windows, Ubuntu hoặc MacOS)</span>
+                </div>
+                <div class="request-content">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Ý thức tự học cao, trách nhiệm cao, kiên trì bền bỉ không ngại cái khó</span>
+                </div>
+                <div class="request-content">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Không được nóng vội, bình tĩnh học, làm bài tập sau mỗi bài học</span>
+                </div>
+                <div class="request-content">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Khi học nếu có khúc mắc hãy tham gia hỏi/đáp tại group FB: Học lập trình web (fullstack.edu.vn)</span>
+                </div>
+                <div class="request-content">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Bạn không cần biết gì hơn nữa, trong khóa học tôi sẽ chỉ cho bạn những gì bạn cần phải biết</span>
+                </div>
+            </div>
+        </div>
+        <div class="container_right">
+            <div class="container_right_video">
+                <div class="right-video" th:style="'background-image: url('+${course.courseAvt}+');'">
+                    <div>
+                        <span>Xem giới thiệu khóa học</span>
+                    </div>
+                </div>
+            </div>
+            <h2>Miễn phí</h2>
+            <button>ĐĂNG KÝ HỌC</button>
+            <div class="course_information">
+                <div>
+                    <i class="fa-solid fa-gauge"></i>
+                    <span>Trình độ cơ bản</span>
+                </div>
+                <div>
+                    <i class="fa-solid fa-newspaper"></i>
+                    <span>Tổng số <span class="total" th:text="${#lists.size(chapters)}">[Số lương bài]</span> bài học</span>
+                </div>
+                <div>
+                    <i class="fa-solid fa-clock"></i>
+                    <span>Thời lượng <span class="time">30 giờ 27 phút</span></span>
+                </div>
+                <div>
+                    <i class="fa-solid fa-battery-full"></i>
+                    <span>Học mọi lúc, mọi nơi</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
