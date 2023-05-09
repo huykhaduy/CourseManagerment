@@ -11,6 +11,7 @@ import com.phanlop.khoahoc.Repository.DepartmentRepository;
 import com.phanlop.khoahoc.Service.CourseServices;
 import com.phanlop.khoahoc.Service.UserServices;
 import com.phanlop.khoahoc.Utils.ObjectMapperUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -27,6 +28,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +41,7 @@ public class CourseController {
     private final CourseServices courseServices;
     private final UserServices userServices;
     private final DepartmentRepository departmentRepository;
-    private final static String uploadedFolder = "E:/";
+    private final HttpServletRequest request;
 
     @GetMapping("/search")
     public List<CourseDTO> searchCourse(Authentication authentication, @Param("text") String text){
@@ -64,6 +68,42 @@ public class CourseController {
             return ObjectMapperUtils.map(course, CourseDTO.class);
         }
         return null;
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Course> addCourse(@RequestParam(name = "courseAvtFile", required = false) MultipartFile courseAvtFile,
+                                            @RequestParam(name = "courseName", required = false) String courseName,
+                                            @RequestParam(name = "courseDes", required = false) String courseDes,
+                                            @RequestParam(name = "courseOwnerID", required = false) UUID courseOwnerID,
+                                            @RequestParam(name = "departmentID", required = false) UUID departmentID) {
+//        User courseOwner = userService.getUserByID(courseOwnerID);
+//        if (courseOwner == null) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//
+//        Department department = departmentService.getDepartmentByID(departmentID);
+//        if (department == null) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//
+//        Course newCourse = new Course(courseAvtFile, courseName, courseDes, courseOwner, department);
+//        courseService.addCourse(newCourse);
+        byte[] bytes = new byte[0];
+        try {
+            bytes = courseAvtFile.getBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Path path = Paths.get("uploads/course-avts/" + "/" + courseAvtFile.getOriginalFilename());
+        try {
+            Files.createDirectories(path.getParent());
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(path.toString());
+
+        return ResponseEntity.ok().build();
     }
 
 
