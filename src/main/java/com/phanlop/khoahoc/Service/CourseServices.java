@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface CourseServices {
     List<Course> getAllCourses();
+    List<Course> searchByCourseOwner(User user, String text);
     Course getCourseById(UUID courseId);
     Course saveCourse(Course course);
     void deleteCourse(UUID courseId);

@@ -21,6 +21,7 @@ public class File {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID fileID;
     private String localUrl;
+    private String fileName;
     @CreatedDate
     private Instant createdDate;
 

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trang quản lý - F8</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="https://kit.fontawesome.com/69331f932b.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: logined-header}"></div>
+<div class="main bg-light">
+    <div th:replace="~{fragments/navbar_admin}"></div>
+
+    <div class="content">
+        <div class="course-wrapper px-5 py-4">
+            <div class="course-manager-section bg-white">
+                <div class="row">
+                    <div class="col">
+                        <h5>Quản lý khóa học</h5>
+                        <p class="text-muted">Có 3 khóa học</p>
+                    </div>
+                    <div class="col-auto me-auto">
+                        <btn class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">Thêm khóa học</btn>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="form-group has-search col-4">
+                        <span class="fa fa-search form-control-feedback"></span>
+                        <input type="text" class="form-control" placeholder="Tìm kiếm khóa học">
+                    </div>
+                </div>
+
+                <div class="row course-header">
+                    <div class="col-1">
+                        Avatar
+                    </div>
+                    <div class="col-3">
+                        Mã khóa học
+                    </div>
+                    <div class="col-2">
+                        Tên khóa học
+                    </div>
+                    <div class="col-2">
+                        Mô tả
+                    </div>
+                    <div class="col-1">
+                        Ngày tạo
+                    </div>
+                    <div class="col-2">
+                        Khoa
+                    </div>
+                    <div class="col-1">
+                        Thao tác
+                    </div>
+                </div>
+
+                <div class="row course-item py-3">
+                    <div class="col-1">
+                        <img src="https://cdn4.buysellads.net/uu/1/127419/1670531697-AdobeTeams.jpg" alt="">
+                    </div>
+                    <div class="col-3">
+                        1c2149fa-e73e-11ed-a05b-0242ac120003
+                    </div>
+                    <div class="col-2">
+                        Khóa học lập trình Java
+                    </div>
+                    <div class="col-2">
+                        Cơ bản lập trình Java: OOP, ..
+                    </div>
+                    <div class="col-1">
+                        30/04/2023
+                    </div>
+                    <div class="col-2">
+                        Công nghê thông tin
+                    </div>
+                    <div class="col-1 text-center">
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="triggerId">
+                                <button class="dropdown-item" href="#">Thêm chapter</button>
+                                <button class="dropdown-item" href="#">Sửa khóa học</button>
+                                <button class="dropdown-item" href="#">Xóa khóa học</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row course-item py-3">
+                    <div class="col-1">
+                        <img src="https://cdn4.buysellads.net/uu/1/127419/1670531697-AdobeTeams.jpg" alt="">
+                    </div>
+                    <div class="col-3">
+                        1c2149fa-e73e-11ed-a05b-0242ac120003
+                    </div>
+                    <div class="col-2">
+                        Khóa học lập trình Java
+                    </div>
+                    <div class="col-2">
+                        Cơ bản lập trình Java: OOP, ..
+                    </div>
+                    <div class="col-1">
+                        30/04/2023
+                    </div>
+                    <div class="col-2">
+                        Công nghê thông tin
+                    </div>
+                    <div class="col-1 text-center">
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="triggerId">
+                                <button class="dropdown-item" href="#">Thêm chapter</button>
+                                <button class="dropdown-item" href="#">Sửa khóa học</button>
+                                <button class="dropdown-item" href="#">Xóa khóa học</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row course-item py-3">
+                    <div class="col-1">
+                        <img src="https://cdn4.buysellads.net/uu/1/127419/1670531697-AdobeTeams.jpg" alt="">
+                    </div>
+                    <div class="col-3">
+                        1c2149fa-e73e-11ed-a05b-0242ac120003
+                    </div>
+                    <div class="col-2">
+                        Khóa học lập trình Java
+                    </div>
+                    <div class="col-2">
+                        Cơ bản lập trình Java: OOP, ..
+                    </div>
+                    <div class="col-1">
+                        30/04/2023
+                    </div>
+                    <div class="col-2">
+                        Công nghê thông tin
+                    </div>
+                    <div class="col-1 text-center">
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle" type="button" id="triggerId" data-bs-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="triggerId">
+                                <button class="dropdown-item">Thêm chapter</button>
+                                <button class="dropdown-item">Sửa khóa học</button>
+                                <button class="dropdown-item">Xóa khóa học</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal thêm khóa học-->
+                <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">Thêm khóa học</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Tên khóa học</label>
+                                    <input type="text" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Avatar khóa học</label>
+                                    <input type="file" name="" id="" class="form-control" placeholder="" aria-describedby="helpId" accept="image/png, image/gif, image/jpeg">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Mô tả</label>
+                                    <input type="text" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Chọn khoa</label>
+                                    <select class="form-select" name="" id="">
+                                        <option selected>Công nghệ thông tin</option>
+                                        <option value="">Điện tử viễn thông</option>
+                                        <option value="">Tiếng Anh</option>
+                                        <option value="">Giáo dục tiểu học</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary">Thêm</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal sửa khóa học-->
+                <div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5">Sửa khóa học</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Tên khóa học</label>
+                                    <input type="text" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Avatar khóa học</label>
+                                    <input type="file" name="" id="" class="form-control" placeholder="" aria-describedby="helpId" accept="image/png, image/gif, image/jpeg">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Mô tả</label>
+                                    <input type="text" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Chọn khoa</label>
+                                    <select class="form-select" name="" id="">
+                                        <option selected>Công nghệ thông tin</option>
+                                        <option value="">Điện tử viễn thông</option>
+                                        <option value="">Tiếng Anh</option>
+                                        <option value="">Giáo dục tiểu học</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary">Thêm</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+
+</script>
+</html>

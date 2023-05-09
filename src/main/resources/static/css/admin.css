@@ -35,7 +35,7 @@ li{
 
 .content{
     padding-left: 250px;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .course-manager-section{

@@ -10,6 +10,10 @@ a{
     text-decoration: none;
 }
 
+#nav{
+    z-index: 100;
+}
+
 /*Navbar*/
 .nav-logo-text{
     font-size: 1rem;

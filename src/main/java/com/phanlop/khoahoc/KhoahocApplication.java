@@ -87,6 +87,7 @@ public class KhoahocApplication implements CommandLineRunner{
 		for (int i=0;i<20;i++){
 			Course course = new Course();
 			course.setCourseOwner(adminUser);
+			course.setCourseDes("Mô tả khóa học Contrary to popular belief, Lorem Ipsum is not simply random text.");
 			course.setCourseName("Khóa học thứ "+i);
 			if (i%2==0)
 				course.setDepartment(cntt);
@@ -96,7 +97,10 @@ public class KhoahocApplication implements CommandLineRunner{
 
 			for (int j=0;j<5;j++){
 				Chapter chapter = new Chapter();
-				chapter.setChapterTitle(i+".Xin chào thế giới");
+				chapter.setChapterTitle(j+".Xin chào thế giới");
+				chapter.setChapterSort(j);
+				chapter.setChapterVideo("https://www.youtube.com/embed/z2f7RHgvddc");
+				chapter.setChapterContent("Nội dung chương Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.");
 				chapter.setCourse(course);
 				chapterRepository.save(chapter);
 			}

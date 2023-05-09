@@ -19,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class WebSecurityConfig{
     private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -45,14 +46,14 @@ public class WebSecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("login", "signup").permitAll()
-                        .anyRequest().authenticated()
-//                                .anyRequest().permitAll()
+//                        .requestMatchers("login", "signup", "/css").permitAll()
+//                        .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/")
+                        .successHandler(customAuthenticationSuccessHandler)
                 )
                 .logout((logout) -> logout.permitAll());
 

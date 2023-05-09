@@ -1,10 +1,12 @@
 package com.phanlop.khoahoc.Controller;
 
 import com.phanlop.khoahoc.Config.CustomUserDetails;
+import com.phanlop.khoahoc.Entity.Chapter;
 import com.phanlop.khoahoc.Entity.Course;
 import com.phanlop.khoahoc.Entity.User;
 import com.phanlop.khoahoc.Repository.CourseRepository;
 import com.phanlop.khoahoc.Repository.DepartmentRepository;
+import com.phanlop.khoahoc.Service.ChapterServices;
 import com.phanlop.khoahoc.Service.CourseServices;
 import com.phanlop.khoahoc.Service.UserServices;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +19,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
     private final DepartmentRepository departmentRepository;
-    private final CourseRepository courseRepository;
+    private final ChapterServices chapterServices;
     private final CourseServices courseService;
     private final UserServices userServices;
 
@@ -50,10 +51,27 @@ public class HomeController {
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/detail/{courseId}")
     public String getDetail(@PathVariable String courseId, Model model) {
-        Course myCourse = courseRepository.findById(UUID.fromString(courseId)).get();
+        Course myCourse = courseService.getCourseById(UUID.fromString(courseId));
         model.addAttribute("course", myCourse);
-        model.addAttribute("chapters", myCourse.getListChapters().toArray());
-        System.out.println(myCourse.toString());
+        List<Chapter> chapters = new ArrayList<>(myCourse.getListChapters().stream().toList());
+        chapters.sort(Comparator.comparing(Chapter::getChapterSort));
+        model.addAttribute("chapters", chapters);
         return "course_intro";
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @GetMapping("/detail/{courseId}/chapter/{chapterId}")
+    public String getChapterView(@PathVariable Integer chapterId, @PathVariable String courseId, Model model){
+        Chapter chapter = chapterServices.getChapterById(chapterId);
+        Course course = courseService.getCourseById(UUID.fromString(courseId));
+        if (chapter != null && course != null){
+            List<Chapter> chapters = new ArrayList<>(course.getListChapters().stream().toList());
+            chapters.sort(Comparator.comparing(Chapter::getChapterSort));
+            System.out.println(chapters);
+            model.addAttribute("chapter", chapter);
+            model.addAttribute("course", course);
+            model.addAttribute("chapters", chapters);
+        }
+        return "chapter_watch";
     }
 }

@@ -141,13 +141,8 @@
   margin-left: auto;
 }
 
-.course_information {
-  font-size: 18px;
-  margin-top: 30px;
-}
-
 .course_information div{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .course_information i {

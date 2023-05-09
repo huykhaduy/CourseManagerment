@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +30,18 @@ public class CourseServicesImpl implements CourseServices {
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
+    }
+
+    public List<Course> searchByCourseOwner(User user, String text){
+        List<Course> courses = user.getSelfCourses().stream().toList();
+        List<Course> returnList = new ArrayList<>();
+        for (Course course : courses){
+            if (course.getCourseName().toLowerCase().contains(text.toLowerCase())
+                    || course.getCourseID().toString().equals(text.toLowerCase())){
+                returnList.add(course);
+            }
+        }
+        return returnList;
     }
 
     public Course getCourseById(UUID courseId) {

@@ -17,126 +17,56 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/menu.css}">
-    <link rel="stylesheet" th:href="@{/css/style1.css}">
-    <link rel="stylesheet" th:href="@{/fonts/fontawesome-free-6.1.1-web/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/course_intro.css}">
 </head>
 <body>
 
 <div th:replace="~{fragments/header}"></div>
 <div class="content d-flex">
     <div th:replace="~{fragments/menu :: left-menu}"></div>
-    <div class="w-100 d-flex mx-auto">
-        <div class="container_center">
-            <h1 style="font-size: 35px; margin-top: 50px; margin-bottom: 33px;"><span th:text="${course.courseName}"></span></h1>
-            <span style="font-size: 18px;" th:text="${course.courseDes}">Trong khóa này chúng ta sẽ cùng nhau xây dựng giao diện 2 trang web là The Band & Shopee.</span>
-            <h2 style="font-size: 20px; margin-top: 48px;">Bạn sẽ học được gì?</h2>
-            <div class="course_help">
-                <div class="help_left">
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Biết cách xây dựng giao diện web với HTML, CSS</span>
-                    </div>
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Biết cách đặt tên class CSS theo chuẩn BEM</span>
-                    </div>
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Làm chủ Flexbox khi dựng bố cục website</span>
-                    </div>
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Biết cách tự tạo động lực cho bản thân</span>
-                    </div>
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Học được cách làm UI chỉn chu, kỹ tính</span>
-                    </div>
-                </div>
-                <div class="help_right">
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Biết cách phân tích giao diện website</span>
-                    </div>
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Biết cách làm giao diện web responsive</span>
-                    </div>
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Sở hữu 2 giao diện web khi học xong khóa học</span>
-                    </div>
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Biết cách tự học những kiến thức mới</span>
-                    </div>
-                    <div class="help_content-1">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Nhận chứng chỉ khóa học do F8 cấp</span>
+    <div class="w-100 d-flex mx-auto mt-4">
+        <div class="container_center ms-5">
+            <h4 class="mt-2" th:text="${course.courseName}"></h4>
+            <h6 class="mt-3">Mô tả khóa học khóa học</h6>
+            <span th:text="${course.courseDes}"></span>
+            <h5 class="mt-4">Nội dung khóa học</h5>
+            <div class="course_list_video" style="display: flex; gap: 10px; flex-direction: column;">
+                <div class="card" th:each="chapter : ${chapters}">
+                    <div class="card-body">
+                        <a th:href="@{/detail/{courseID}/chapter/{chapterId}(courseID=${course.courseID}, chapterId=${chapter.chapterId})}">
+                            <i class="bi bi-play-fill"></i>
+                            <span th:text="${chapter.chapterTitle}"></span>
+                        </a>
                     </div>
                 </div>
             </div>
-            <h2 style="font-size: 20px; margin-bottom: 25px;">Nội dung khóa học</h2>
-            <span style="font-size: 18px;"><span style="font-weight: 500;" th:text="${#lists.size(chapters)}">[Số lượng bài học]</span> bài học • Thời lượng <span style="font-weight: 500;">[Tổng thời gian]</span> phút</span>
-            <div class="course_list_video">
-                <div class="list_video"  th:each="chapter : ${chapters}">
-                    <a class="list_title">
-                        <i class="fa-solid fa-circle-play"></i>
-                        <span th:text="${chapter.chapterTitle}">[Chapter Title]</span>
-                    </a>
-                    <span class="list_time">[Time]</span>
-                </div>
-            </div>
-            <span style="font-size: 20px; font-weight: 550;">Yêu cầu</span>
-            <div class="container_request">
-                <div class="request-content">
-                    <i class="fa-solid fa-check"></i>
-                    <span>Máy vi tính kết nối internet (Windows, Ubuntu hoặc MacOS)</span>
-                </div>
-                <div class="request-content">
-                    <i class="fa-solid fa-check"></i>
-                    <span>Ý thức tự học cao, trách nhiệm cao, kiên trì bền bỉ không ngại cái khó</span>
-                </div>
-                <div class="request-content">
-                    <i class="fa-solid fa-check"></i>
-                    <span>Không được nóng vội, bình tĩnh học, làm bài tập sau mỗi bài học</span>
-                </div>
-                <div class="request-content">
-                    <i class="fa-solid fa-check"></i>
-                    <span>Khi học nếu có khúc mắc hãy tham gia hỏi/đáp tại group FB: Học lập trình web (fullstack.edu.vn)</span>
-                </div>
-                <div class="request-content">
-                    <i class="fa-solid fa-check"></i>
-                    <span>Bạn không cần biết gì hơn nữa, trong khóa học tôi sẽ chỉ cho bạn những gì bạn cần phải biết</span>
+            <h5 class="mt-4">Tài liệu tham khảo</h5>
+            <div class="course_list_video" style="display: flex; gap: 10px;">
+                <div class="card" th:each="file : ${course.listDocuments}">
+                    <div class="card-body">
+                        <a th:href="@{/file/{localUrl}(localUrl=${file.localUrl})}" download>
+                            <span th:text="${file.fileName}"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="container_right">
+        <div class="container_right mt-4">
             <div class="container_right_video">
-                <div class="right-video" th:style="'background-image: url('+${course.courseAvt}+');'">
-                    <div>
-                        <span>Xem giới thiệu khóa học</span>
-                    </div>
-                </div>
+                <img class="img-fluid" th:src="${course.courseAvt}" alt="" style="aspect-ratio: 16/9; border-radius: 10px; width: 100%">
             </div>
-            <h2>Miễn phí</h2>
-            <button>ĐĂNG KÝ HỌC</button>
             <div class="course_information">
                 <div>
-                    <i class="fa-solid fa-gauge"></i>
-                    <span>Trình độ cơ bản</span>
+                    Giảng viên: <span th:text="${course.courseOwner.fullName}"></span>
                 </div>
                 <div>
-                    <i class="fa-solid fa-newspaper"></i>
-                    <span>Tổng số <span class="total" th:text="${#lists.size(chapters)}">[Số lương bài]</span> bài học</span>
+                    Khoa: <span th:text="${course.department.departmentName}"></span>
                 </div>
                 <div>
-                    <i class="fa-solid fa-clock"></i>
-                    <span>Thời lượng <span class="time">30 giờ 27 phút</span></span>
+                    Tổng số: <span class="total" th:text="${#lists.size(chapters)}"></span> bài học
                 </div>
                 <div>
-                    <i class="fa-solid fa-battery-full"></i>
-                    <span>Học mọi lúc, mọi nơi</span>
+                    Tài liệu tham khảo: <span th:text="${#lists.size(course.listDocuments)}"></span> tài liệu
                 </div>
             </div>
         </div>
