@@ -17,10 +17,10 @@ public class CreateCourseDTO {
     private UUID courseID;
     @NotBlank(message = "Tên khóa học không được trống")
     private String courseName;
-    private String courseDes;
+    private String courseDes = "";
     private MultipartFile courseAvt;
     private Instant createDate;
     private Instant modifiedDate;
     @NotNull(message = "Vui lòng chọn khoa cho khóa học")
-    private DepartmentDTO department;
+    private Integer departmentId;
 }

@@ -35,7 +35,7 @@ public class File {
 
     // Tạo table CourseDocument
     @ManyToMany(mappedBy = "listDocuments")
-    private Set<Course> chapters = new HashSet<>();
+    private Set<Course> courses = new HashSet<>();
 
     // Tạo table AssignmentFile
     @ManyToMany(mappedBy = "listFiles")

@@ -13,5 +13,6 @@ import java.util.UUID;
 public class FileDTO {
     private UUID fileID;
     private String localUrl;
+    private String fileName;
     private Instant createDate;
 }

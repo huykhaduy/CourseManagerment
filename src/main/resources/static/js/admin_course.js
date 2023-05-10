@@ -66,9 +66,17 @@ const fetchDepartment = () => {
         method: "GET",
         success: function (data) {
             $("#departmentId").html("");
+            let isFirst = true;
             if (data){
                 let modalAddDepartments = data.map(item => {
-                    return `<option value="${item.deparmentId}">${item.departmentName}</option>`
+                    if (isFirst === true){
+                        isFirst = false;
+                        return `<option value="${item.departmentId}" selected>${item.departmentName}</option>`
+                    }
+                    else {
+                        return `<option value="${item.departmentId}">${item.departmentName}</option>`
+                    }
+
                 })
                 $("#departmentId").html(modalAddDepartments);
             }
@@ -84,7 +92,7 @@ $('#add-course-form').submit(function(event) {
     formData.append("courseDes", $("#courseDes").val())
     formData.append("departmentId", $("#departmentId").val())
     $.ajax({
-        url: '/course/create',
+        url: '/course/add',
         type: 'POST',
         data: formData,
         dataType: 'json',
