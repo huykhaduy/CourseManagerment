@@ -46,12 +46,14 @@ public class FileController {
         mediaTypeMap.put("png", MediaType.IMAGE_PNG);
         mediaTypeMap.put("gif", MediaType.IMAGE_GIF);
         mediaTypeMap.put("pdf", MediaType.APPLICATION_PDF);
-        mediaTypeMap.put("docx", MediaType.TEXT_MARKDOWN);
-        mediaTypeMap.put("doc", MediaType.TEXT_MARKDOWN);
+        mediaTypeMap.put("docx", MediaType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
+        mediaTypeMap.put("doc", MediaType.valueOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
         mediaTypeMap.put("java", MediaType.TEXT_PLAIN);
+        mediaTypeMap.put("cpp", MediaType.TEXT_PLAIN);
         mediaTypeMap.put("txt", MediaType.TEXT_PLAIN);
         MediaType mediaType = mediaTypeMap.getOrDefault(extension.toLowerCase(), MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentType(mediaType);
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"");
         return new ResponseEntity<byte[]>(imageBytes, headers, HttpStatus.OK);
     }
 

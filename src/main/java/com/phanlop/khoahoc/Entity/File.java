@@ -22,6 +22,7 @@ public class File {
     private UUID fileID;
     private String localUrl;
     private String fileName;
+    private String fileLink;
     @CreatedDate
     private Instant createdDate;
 

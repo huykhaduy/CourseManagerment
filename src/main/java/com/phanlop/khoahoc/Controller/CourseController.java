@@ -73,7 +73,7 @@ public class CourseController {
         Department department = departmentRepository.findById(courseDTO.getDepartmentId()).orElse(null);
         if (department  != null && file != null){
             Course course = ObjectMapperUtils.map(courseDTO, Course.class);
-            course.setCourseAvt("uploads/" + file.getFileID().toString());
+            course.setCourseAvt(file.getFileLink());
             course.setDepartment(department);
             courseServices.saveCourse(course);
             return ResponseEntity.ok(ObjectMapperUtils.map(course, CourseDTO.class));

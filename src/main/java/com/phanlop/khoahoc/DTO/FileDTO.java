@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 public class FileDTO {
     private UUID fileID;
-    private String localUrl;
+    private String fileLink;
     private String fileName;
     private Instant createDate;
 }
