@@ -44,8 +44,28 @@ public class HomeController {
         model.addAttribute("departments", departmentRepository.findAll());
         model.addAttribute("khoaId", khoa);
         model.addAttribute("totalPages", courses.getTotalPages());
-        model.addAttribute("currentPage", page + 1);;
+        model.addAttribute("currentPage", page + 1);
+
         return "main";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @GetMapping("/admin")
+    public String getHomeAdminPage(@RequestParam(defaultValue = "0") int khoa,
+                              @RequestParam(defaultValue = "1") int page,
+                              @RequestParam(defaultValue = "12") int pageSize,
+                              Authentication authentication,
+                              Model model) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userServices.getUserByUserName(userDetails.getUsername());
+        page = page - 1;
+        Page<Course> courses = courseService.filterByUserAndDepartmentAdmin(khoa, user, page, pageSize);
+        model.addAttribute("courses", courses.getContent());
+        model.addAttribute("departments", departmentRepository.findAll());
+        model.addAttribute("khoaId", khoa);
+        model.addAttribute("totalPages", courses.getTotalPages());
+        model.addAttribute("currentPage", page + 1);
+        return "main_admin";
     }
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
@@ -57,6 +77,17 @@ public class HomeController {
         chapters.sort(Comparator.comparing(Chapter::getChapterSort));
         model.addAttribute("chapters", chapters);
         return "course_intro";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER', 'ROLE_ADMIN')")
+    @GetMapping("/admin/detail/{courseId}")
+    public String getAdminDetail(@PathVariable String courseId, Model model) {
+        Course myCourse = courseService.getCourseById(UUID.fromString(courseId));
+        model.addAttribute("course", myCourse);
+        List<Chapter> chapters = new ArrayList<>(myCourse.getListChapters().stream().toList());
+        chapters.sort(Comparator.comparing(Chapter::getChapterSort));
+        model.addAttribute("chapters", chapters);
+        return "course_intro_admin";
     }
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")

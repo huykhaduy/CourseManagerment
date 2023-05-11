@@ -1,20 +1,43 @@
-<div th:fragment="left-menu" class="left-menu">
-    <a href="/" class="d-flex align-items-center justify-content-center mb-3" data-bs-toggle="tooltip" data-bs-title="Tham gia vào khóa học">
+ <div th:fragment="left-menu" class="left-menu">
+     <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_TEACHER')">
+        <a href="/admin" class="d-flex align-items-center justify-content-center mb-3" data-bs-toggle="tooltip" data-bs-title="Tham gia vào khóa học">
         <span class="bg-primary rounded-circle d-flex justify-content-center align-items-center text-white"
               style="width: 40px;height: 40px">
             <i class="bi bi-plus" style="font-size: 20px"></i>
         </span>
-    </a>
-    <a href="/" class="left-menu-item active">
-        <i class="bi bi-house-fill" style="font-size: 20px"></i>
-        <div>Home</div>
-    </a>
-    <a href="/" class="left-menu-item">
-        <i class="bi bi-chat-fill" style="font-size: 20px"></i>
-        <div>Thảo luận</div>
-    </a>
-    <a href="/" class="left-menu-item">
-        <i class="bi bi-list-task" style="font-size: 20px"></i>
-        <div>Bài tập</div>
-    </a>
-</div>
+        </a>
+        <a href="/admin" class="left-menu-item active">
+            <i class="bi bi-house-fill" style="font-size: 20px"></i>
+            <div>Home</div>
+        </a>
+        <a href="/" class="left-menu-item">
+            <i class="bi bi-chat-fill" style="font-size: 20px"></i>
+            <div>Thảo luận</div>
+        </a>
+        <a href="/" class="left-menu-item">
+            <i class="bi bi-list-task" style="font-size: 20px"></i>
+            <div>Bài tập</div>
+        </a>
+     </th:block>
+
+     <th:block sec:authorize="hasAuthority('ROLE_STUDENT')">
+         <a href="/" class="d-flex align-items-center justify-content-center mb-3" data-bs-toggle="tooltip" data-bs-title="Tham gia vào khóa học">
+        <span class="bg-primary rounded-circle d-flex justify-content-center align-items-center text-white"
+              style="width: 40px;height: 40px">
+            <i class="bi bi-plus" style="font-size: 20px"></i>
+        </span>
+         </a>
+         <a href="/" class="left-menu-item active">
+             <i class="bi bi-house-fill" style="font-size: 20px"></i>
+             <div>Home</div>
+         </a>
+         <a href="/" class="left-menu-item">
+             <i class="bi bi-chat-fill" style="font-size: 20px"></i>
+             <div>Thảo luận</div>
+         </a>
+         <a href="/" class="left-menu-item">
+             <i class="bi bi-list-task" style="font-size: 20px"></i>
+             <div>Bài tập</div>
+         </a>
+     </th:block>
+ </div>

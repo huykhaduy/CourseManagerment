@@ -37,7 +37,7 @@ public class FileServicesImpl implements FileServices {
         byte[] bytes = new byte[0];
         try {
             bytes = file.getBytes();
-            Path path = Paths.get(filePath + "/" + file.getOriginalFilename());
+            Path path = Paths.get(filePath + UUID.randomUUID() + file.getOriginalFilename());
             Files.createDirectories(path.getParent());
             Files.write(path, bytes);
             return path.toString();

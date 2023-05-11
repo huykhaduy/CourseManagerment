@@ -23,12 +23,24 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand mx-md-0 mx-3" href="/">
+
+        <th:block sec:authorize="hasAuthority('ROLE_STUDENT')">
+            <a class="navbar-brand mx-md-0 mx-3" href="/">
+                <div class="d-flex align-items-center">
+                    <img th:src="@{/img/f9.png}" class="nav-logo-icon">
+                    <p class="nav-logo-text">Khóa học trực tuyến</p>
+                </div>
+            </a>
+        </th:block>
+
+        <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_TEACHER')">
+        <a class="navbar-brand mx-md-0 mx-3" href="/admin">
             <div class="d-flex align-items-center">
                 <img th:src="@{/img/f9.png}" class="nav-logo-icon">
                 <p class="nav-logo-text">Khóa học trực tuyến</p>
             </div>
         </a>
+        </th:block>
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <th:block sec:authorize="hasAuthority('ROLE_STUDENT')">
             <div class="input-group ms-md-auto d-flex form-search position-relative">
@@ -43,6 +55,19 @@
                     </div>
             </div>
             </th:block>
+            <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_TEACHER')">
+                <div class="input-group ms-md-auto d-flex form-search position-relative">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    </div>
+                    <input id="input-admin-search-box" class="form-control me-2 form-search-input" type="text" placeholder="Tìm kiếm khóa học ..." aria-label="Search">
+                    <div id="popup-admin-search-box" class="popup-search position-absolute">
+                        <h6 class="text-dark ms-4">Các khóa học phù hợp</h6>
+                        <ul class="list-group" id="list-admin-data-search">
+                        </ul>
+                    </div>
+                </div>
+            </th:block>
             <div class="ms-md-auto login-group">
                 <div class="btn-group d-flex align-items-center">
                     <button type="button" class="btn btn-danger dropdown-toggle header-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,9 +76,6 @@
                     </button>
                     <form action="/logout" method="post">
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <th:block sec:authorize="hasAnyAuthority('ROLE_ADMIN', 'ROLE_TEACHER')">
-                                <li><a class="dropdown-item text-small" href="/admin/course">Trang quản trị viên</a></li>
-                            </th:block>
                             <li><a class="dropdown-item text-small" href="#">Thông tin tài khoản</a></li>
                             <li><button class="dropdown-item text-small" type="submit">Đăng xuất</button></li>
                         </ul>
