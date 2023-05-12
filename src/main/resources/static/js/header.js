@@ -51,7 +51,7 @@ $("#input-admin-search-box").on('input',(function(){
                 $("#popup-admin-search-box").css("display", "block");
                 let html = data.map(item=>{
                     return `<li class="list-item">
-                                <a href="/detail/${item.courseID}" class="d-flex align-items-center">
+                                <a href="/admin/detail/${item.courseID}" class="d-flex align-items-center">
                                     <img class="search-item-img" src="${item.courseAvt}">
                                     <div class="search-item-name text-dark mx-2">${item.courseName}</div>
                                 </a>
