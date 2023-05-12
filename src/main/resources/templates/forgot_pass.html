@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang quên mật khẩu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function sendOTP() {
+            var email = $("#email").val();
+            $.ajax({
+                type: "POST",
+                url: "/send-otp",
+                data: { email: email },
+                success: function (response) {
+                    alert(response);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ": " + errorThrown);
+                }
+            });
+        }
+
+        function validateOTP() {
+            var otp = $("#otp-value").val();
+            $.ajax({
+                type: "POST",
+                url: "/validateotp",
+                data: { otp: otp },
+                success: function (response) {
+                    alert(response);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ": " + errorThrown);
+                }
+            });
+        }
+    </script>
+    <style>
+        .form-send-email {
+            display: flex;
+        }
+        .form-send-email button {
+            margin: 32px 0 0 25px;
+            height: 46px;
+        }
+        .form-send-email div {
+            width: 80%;
+        }
+
+        .form-otp {
+            display: flex;
+            height: 46px;
+        }
+        .form-otp button {
+            margin-left: 25px;
+            height: 46px;
+        }
+        .form-otp input {
+            width: 50%;
+        }
+
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/header}"></div>
+<div>
+    <section style="background-color: #f05123e3;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col col-xl-10">
+                    <div class="card" style="border-radius: 1rem;">
+                        <div class="row g-0">
+                            <div class="col-md-6 col-lg-5 d-none d-md-block my-auto">
+                                <img src="https://pro-seeds.com.vn/wp-content/uploads/2018/10/contents.png"
+                                     alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                            </div>
+                            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                                <div class="card-body p-4 p-lg-5 text-black">
+                                    <form th:action="@{/forget}" method="post">
+                                        <div class="d-flex align-items-center mb-3 pb-1">
+                                            <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
+                                            <span class="h1 fw-bold mb-0">Khóa học trực tuyến F9</span>
+                                        </div>
+
+                                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Nhập email tài khoản của bạn
+                                        </h5>
+
+                                        <div class="form-outline mb-4 form-send-email">
+                                            <div>
+                                                <label class="form-label" for="form2Example17">Email address</label>
+                                                <input name="username" type="email" id="email" class="form-control form-control-lg" />
+                                            </div>
+                                            <button class="btn btn-dark btn-lg btn-block" type="button" onclick="sendOTP()">Gửi</button>
+                                        </div>
+
+                                        <div class="text-danger mb-3" th:if="${param.error}">
+                                            Email không tồn tại tài khoản!
+                                        </div>
+                                    </form>
+                                    <form th:action="@{/forget/otp}" method="post">
+
+                                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Nhập mã OTP
+                                        </h5>
+
+                                        <div class="form-outline mb-4 form-otp">
+                                            <input name="username" type="text" id="otp-value" class="form-control form-control-lg" />
+                                            <button class="btn btn-dark btn-lg btn-block" type="submit" onclick="validateOTP()">Xác nhận</button>
+                                        </div>
+
+                                        <div class="text-danger mb-3" th:if="${param.error}">
+                                            Mã OTP không chính xác!
+                                        </div>
+
+                                        <p class="mb-5 pb-lg-2" style="color: #393f81;">Quay lại trang đăng nhập? <a href="/login" style="color: #393f81;">Click here</a></p>
+                                        <a href="#!" class="small text-muted">Terms of use.</a>
+                                        <a href="#!" class="small text-muted">Privacy policy</a>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>
