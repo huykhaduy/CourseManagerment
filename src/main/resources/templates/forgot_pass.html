@@ -9,36 +9,66 @@
             integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
     <script>
+        var email = "";
         function sendOTP() {
-            var email = $("#email").val();
-            $.ajax({
-                type: "POST",
-                url: "/send-otp",
-                data: { email: email },
-                success: function (response) {
-                    alert(response);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ": " + errorThrown);
-                }
-            });
+            email = $("#email").val();
+            if(email == '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Email không được rỗng',
+                    text: 'Vui lòng nhập email!'
+                })
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/otp/sendOtp",
+                    data: { email: email },
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: response,
+                            text: 'Cảm ơn bạn đã dành thời gian cho chúng tôi!'
+                        })
+                    },
+                    error: function (response) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: response.responseText,
+                            text: 'Cảm ơn bạn đã dành thời gian cho chúng tôi!'
+                        })
+                    }
+                });
+            }
         }
 
         function validateOTP() {
-            var otp = $("#otp-value").val();
-            $.ajax({
-                type: "POST",
-                url: "/validateotp",
-                data: { otp: otp },
-                success: function (response) {
-                    alert(response);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert(textStatus + ": " + errorThrown);
-                }
-            });
+                var otp = $("#otp-value").val();
+                        $.ajax({
+                            type: "POST",
+                            url: "/otp/confirmOtp",
+                            data: { otpCode: otp, email: email },
+                            success: function (response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: response,
+                                    text: 'Cảm ơn bạn đã dành thời gian cho chúng tôi!'
+                                })
+                                setTimeout(function (){
+                                    window.location.href = "http://localhost:8080/reset";
+                                },5000);
+                            },
+                            error: function (response) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: response.responseText,
+                                    text: 'Cảm ơn bạn đã dành thời gian cho chúng tôi!'
+                                })
+                            }
+                        });
         }
     </script>
     <style>
@@ -93,7 +123,7 @@
 
                                         <div class="form-outline mb-4 form-send-email">
                                             <div>
-                                                <label class="form-label" for="form2Example17">Email address</label>
+                                                <label class="form-label" for="email">Email address</label>
                                                 <input name="username" type="email" id="email" class="form-control form-control-lg" />
                                             </div>
                                             <button class="btn btn-dark btn-lg btn-block" type="button" onclick="sendOTP()">Gửi</button>
@@ -110,7 +140,7 @@
 
                                         <div class="form-outline mb-4 form-otp">
                                             <input name="username" type="text" id="otp-value" class="form-control form-control-lg" />
-                                            <button class="btn btn-dark btn-lg btn-block" type="submit" onclick="validateOTP()">Xác nhận</button>
+                                            <button class="btn btn-dark btn-lg btn-block" type="button" onclick="validateOTP()">Xác nhận</button>
                                         </div>
 
                                         <div class="text-danger mb-3" th:if="${param.error}">

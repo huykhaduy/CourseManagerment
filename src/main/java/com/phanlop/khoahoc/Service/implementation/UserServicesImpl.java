@@ -5,6 +5,7 @@ import com.phanlop.khoahoc.Repository.UserRepository;
 import com.phanlop.khoahoc.Service.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public class UserServicesImpl implements UserServices {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUsers() {
@@ -36,5 +39,10 @@ public class UserServicesImpl implements UserServices {
     @Override
     public User getUserByUserName(String username) {
         return userRepository.findByEmail(username);
+    }
+    @Override
+    public void resetPassword(User user, String newPassword){
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }
