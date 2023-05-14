@@ -98,7 +98,11 @@ public class HomeController {
         if (chapter != null && course != null){
             List<Chapter> chapters = new ArrayList<>(course.getListChapters().stream().toList());
             chapters.sort(Comparator.comparing(Chapter::getChapterSort));
-            System.out.println(chapters);
+            if (chapter.getChapterVideo().contains("youtube.com/embed/")){
+                model.addAttribute("isYoutube", true);
+            } else {
+                model.addAttribute("isYoutube", false);
+            }
             model.addAttribute("chapter", chapter);
             model.addAttribute("course", course);
             model.addAttribute("chapters", chapters);

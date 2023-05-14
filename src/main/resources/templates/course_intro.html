@@ -44,7 +44,8 @@
             <div class="course_list_video" style="display: flex; gap: 10px;">
                 <div class="card" th:each="file : ${course.listDocuments}">
                     <div class="card-body">
-                        <a th:href="@{/file/{localUrl}(localUrl=${file.localUrl})}" download>
+                        <a th:href="@{{fileLink}(fileLink=${file.fileLink})}" download>
+                            <i class="bi bi-file-arrow-down me-2"></i>
                             <span th:text="${file.fileName}"></span>
                         </a>
                     </div>

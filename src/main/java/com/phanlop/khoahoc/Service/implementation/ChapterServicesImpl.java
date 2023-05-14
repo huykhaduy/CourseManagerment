@@ -38,4 +38,15 @@ public class ChapterServicesImpl implements ChapterServices {
     public List<Chapter> getChaptersByCourse(Course course) {
         return chapterRepository.findByCourse(course);
     }
+
+    @Override
+    public int getMaxSortOfCourse(Course course) {
+        List<Chapter> list = this.chapterRepository.findByCourse(course);
+        int max = 0;
+        for (Chapter chapter : list) {
+            if (chapter.getChapterSort() > max)
+                max = chapter.getChapterSort();
+        }
+        return max;
+    }
 }

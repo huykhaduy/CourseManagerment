@@ -6,10 +6,7 @@ import com.phanlop.khoahoc.Entity.*;
 import com.phanlop.khoahoc.Repository.AssignmentRepository;
 import com.phanlop.khoahoc.Repository.DepartmentRepository;
 import com.phanlop.khoahoc.Repository.FileRepository;
-import com.phanlop.khoahoc.Service.CourseServices;
-import com.phanlop.khoahoc.Service.EnrollmentServices;
-import com.phanlop.khoahoc.Service.FileServices;
-import com.phanlop.khoahoc.Service.UserServices;
+import com.phanlop.khoahoc.Service.*;
 import com.phanlop.khoahoc.Utils.ObjectMapperUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -33,6 +30,7 @@ import java.util.UUID;
 @RequestMapping("/course")
 public class CourseController {
     private final CourseServices courseServices;
+    private final ChapterServices chapterServices;
     private final UserServices userServices;
     private final DepartmentRepository departmentRepository;
     private final FileServices fileServices;
@@ -66,20 +64,45 @@ public class CourseController {
         return null;
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
-    @PostMapping({"/add", "/edit"})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/add")
     public ResponseEntity<CourseDTO> addCourse(@ModelAttribute CreateCourseDTO courseDTO, Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userServices.getUserByUserName(userDetails.getUsername());
         File file = fileServices.addFile(courseDTO.getCourseAvt());
         Department department = departmentRepository.findById(courseDTO.getDepartmentId()).orElse(null);
         if (department  != null && file != null){
             Course course = ObjectMapperUtils.map(courseDTO, Course.class);
             course.setCourseAvt(file.getFileLink());
             course.setDepartment(department);
+            course.setCourseOwner(user);
             courseServices.saveCourse(course);
             return ResponseEntity.ok(ObjectMapperUtils.map(course, CourseDTO.class));
         }
         return ResponseEntity.badRequest().build();
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/edit")
+        public ResponseEntity<CourseDTO> editCourse(@ModelAttribute CreateCourseDTO courseDTO, Authentication authentication) {
+            Course course = courseServices.getCourseById(courseDTO.getCourseID());
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userServices.getUserByUserName(userDetails.getUsername());
+            File file = fileServices.addFile(courseDTO.getCourseAvt());
+            Department department = departmentRepository.findById(courseDTO.getDepartmentId()).orElse(null);
+            if (department  != null && course != null){
+                course.setDepartment(department);
+                course.setCourseOwner(user);
+                course.setCourseName(courseDTO.getCourseName());
+                course.setCourseDes(courseDTO.getCourseDes());
+                if (file != null){
+                    course.setCourseAvt(file.getFileLink());
+                }
+                courseServices.saveCourse(course);
+                return ResponseEntity.ok(ObjectMapperUtils.map(course, CourseDTO.class));
+            }
+            return ResponseEntity.badRequest().build();
+        }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
     @PostMapping("/delete/{courseId}")
@@ -88,6 +111,113 @@ public class CourseController {
         if (course != null){
             courseServices.deleteCourse(courseId);
             return ResponseEntity.ok(ObjectMapperUtils.map(course, CourseDTO.class));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @GetMapping("/chapter/get/{chapterId}")
+    public ResponseEntity<ChapterDTO> getChapter(@PathVariable Integer chapterId){
+        Chapter chapter = chapterServices.getChapterById(chapterId);
+        if (chapter == null)
+            return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(ObjectMapperUtils.map(chapter, ChapterDTO.class));
+    }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/chapter/add")
+    public ResponseEntity<ChapterDTO> addChapter(@ModelAttribute CreateChapterDTO chapterDTO){
+        File file = fileServices.addFile(chapterDTO.getChapterVideoMulti());
+        Course course = courseServices.getCourseById(chapterDTO.getCourseId());
+        if (course == null)
+            return ResponseEntity.badRequest().build();
+
+        Chapter chapter = ObjectMapperUtils.map(chapterDTO, Chapter.class);
+        chapter.setCourse(course);
+        chapter.setChapterSort(chapterServices.getMaxSortOfCourse(course) + 1);
+        if (file != null){
+            chapter.setChapterVideo(file.getFileLink());
+        } else {
+            chapter.setChapterVideo(chapterDTO.getYoutubeUrl());
+        }
+        ChapterDTO dto = ObjectMapperUtils.map(chapterServices.saveChapter(chapter), ChapterDTO.class);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/chapter/edit")
+    public ResponseEntity<ChapterDTO> editChapter(@ModelAttribute CreateChapterDTO chapterDTO){
+        File file = fileServices.addFile(chapterDTO.getChapterVideoMulti());
+        Chapter chapter = chapterServices.getChapterById(chapterDTO.getChapterId());
+        chapter.setChapterTitle(chapterDTO.getChapterTitle());
+        chapter.setChapterContent(chapterDTO.getChapterContent());
+        if (file != null){
+            chapter.setChapterVideo(file.getFileLink());
+        } else {
+            chapter.setChapterVideo(chapterDTO.getYoutubeUrl());
+        }
+        ChapterDTO dto = ObjectMapperUtils.map(chapterServices.saveChapter(chapter), ChapterDTO.class);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/chapter/remove/{chapterId}")
+    public ResponseEntity<ChapterDTO> addChapter(@PathVariable Integer chapterId){
+        Chapter chapter = chapterServices.getChapterById(chapterId);
+        if (chapter == null)
+            return ResponseEntity.badRequest().build();
+        chapterServices.deleteChapter(chapterId);
+        return ResponseEntity.ok(ObjectMapperUtils.map(chapter, ChapterDTO.class));
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/file/add/{courseId}")
+    public ResponseEntity<FileDTO> addFileToCourse(@ModelAttribute MultipartFile fileUpload, @PathVariable UUID courseId, Authentication authentication){
+        File file = fileServices.addFile(fileUpload);
+        Course course = courseServices.getCourseById(courseId);
+        if (course != null && file != null){
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userServices.getUserByUserName(userDetails.getUsername());
+            file.setUploadedUser(user);
+            file.getCourses().add(course);
+            course.getListDocuments().add(file);
+            File saved = fileRepository.save(file);
+            courseServices.saveCourse(course);
+            return ResponseEntity.ok(ObjectMapperUtils.map(file, FileDTO.class));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/file/add2/{courseId}")
+    public ResponseEntity<FileDTO> addFileToCourse(@RequestParam UUID fileId, @PathVariable UUID courseId, Authentication authentication){
+        File file = fileRepository.findById(fileId).orElse(null);
+        Course course = courseServices.getCourseById(courseId);
+        if (course != null && file != null){
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userServices.getUserByUserName(userDetails.getUsername());
+            file.setUploadedUser(user);
+            file.getCourses().add(course);
+            course.getListDocuments().add(file);
+            File saved = fileRepository.save(file);
+            courseServices.saveCourse(course);
+            return ResponseEntity.ok(ObjectMapperUtils.map(file, FileDTO.class));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PostMapping("/file/remove/{courseId}")
+    public ResponseEntity<FileDTO> removeFromCourse(@RequestParam UUID fileId, @PathVariable UUID courseId){
+        File file = fileRepository.findById(fileId).orElse(null);
+        Course course = courseServices.getCourseById(courseId);
+        if (course != null && file != null){
+            file.getCourses().remove(course);
+            course.getListDocuments().remove(file);
+            File saved = fileRepository.save(file);
+            courseServices.saveCourse(course);
+            return ResponseEntity.ok(ObjectMapperUtils.map(saved, FileDTO.class));
         }
         return ResponseEntity.badRequest().build();
     }
