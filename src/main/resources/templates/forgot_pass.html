@@ -13,14 +13,17 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
     <script>
-        var email = "";
+        let email = "";
         function sendOTP() {
             email = $("#email").val();
+            $("#loadingModal").modal('show');
             if(email == '') {
                 Swal.fire({
                     icon: 'error',
                     title: 'Email không được rỗng',
                     text: 'Vui lòng nhập email!'
+                }).then(()=>{
+                    $("#loadingModal").modal('hide');
                 })
             } else {
                 $.ajax({
@@ -32,13 +35,18 @@
                             icon: 'success',
                             title: response,
                             text: 'Cảm ơn bạn đã dành thời gian cho chúng tôi!'
+                        }).then(()=>{
+                            $("#loadingModal").modal('hide');
                         })
                     },
                     error: function (response) {
+                        $("#loadingModal").modal('hide');
                         Swal.fire({
                             icon: 'error',
                             title: response.responseText,
                             text: 'Cảm ơn bạn đã dành thời gian cho chúng tôi!'
+                        }).then(()=>{
+                            $("#loadingModal").modal('hide');
                         })
                     }
                 });
@@ -56,10 +64,9 @@
                                     icon: 'success',
                                     title: response,
                                     text: 'Cảm ơn bạn đã dành thời gian cho chúng tôi!'
-                                })
-                                setTimeout(function (){
+                                }).then(()=>{
                                     window.location.href = "http://localhost:8080/reset";
-                                },5000);
+                                });
                             },
                             error: function (response) {
                                 Swal.fire({
@@ -160,6 +167,23 @@
             </div>
         </div>
     </section>
+
+<!--    Loading modal -->
+    <div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered d-flex justify-content-center">
+            <div class="modal-content" style="width: 200px; height: 150px;justify-content: center;align-items: center;">
+                <div class="modal-body" style="display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="mt-3">Đang tải ...</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

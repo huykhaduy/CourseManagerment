@@ -45,6 +45,7 @@ public class OTPController {
     @PostMapping("/confirmOtp")
     public ResponseEntity<String> confirmOtp(@RequestParam String email, @RequestParam String otpCode, HttpSession session){
         OTP otp = (OTP) session.getAttribute("otp");
+        session.setAttribute("isCorrect", false);
         if (otp == null){
             return ResponseEntity.badRequest().body("OTP Null");
         }
@@ -52,6 +53,7 @@ public class OTPController {
             return ResponseEntity.badRequest().body("OTP hết hạn");
         }
         if (otp.getEmail().equals(email) && otp.getOtpCode().equals(otpCode)){
+            session.setAttribute("isCorrect", true);
             return ResponseEntity.ok("OTP đúng");
         }
         return ResponseEntity.badRequest().body("OTP bị sai");

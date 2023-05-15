@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/signup")
@@ -27,12 +28,21 @@ public class SignUpController {
     }
 
     @PostMapping
-    public String registerAccount(@ModelAttribute @Valid UserDTO userDTO, BindingResult result) throws BindException {
+    public ModelAndView registerAccount(@ModelAttribute @Valid UserDTO userDTO, BindingResult result) throws BindException {
         if (result.hasErrors()){
             throw new BindException(result);
         }
-        User user = ObjectMapperUtils.map(userDTO, User.class);
-        userServices.saveUser(user);
-        return "login";
+
+        User existingUser = userServices.getUserByUserName(userDTO.getEmail());
+        if (existingUser == null){
+            User user = ObjectMapperUtils.map(userDTO, User.class);
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            userServices.saveUser(user);
+            return new ModelAndView("redirect:/login");
+        }
+        else {
+            String text = "email";
+            return new ModelAndView("redirect:/signup?error="+text);
+        }
     }
 }

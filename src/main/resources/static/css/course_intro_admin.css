@@ -27,3 +27,32 @@
     user-select: none;
     cursor: pointer;
 }
+
+.content-container{
+    width: 100%;
+}
+
+.content-left{
+    width: 60%;
+}
+
+.content-right{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.member-item{
+    padding: 5px 0px;
+    border-radius: 5px;
+    border: 1px solid #dedede;
+}
+
+.user-item-search{
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: white;
+}

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'F9 - ' + ${course.courseName}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel = "icon" th:href="@{/img/f9.png}" type = "image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/menu.css}">
+    <link rel="stylesheet" th:href="@{/css/course_intro.css}">
+    <link rel="stylesheet" th:href="@{/css/course_intro_admin.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header}"></div>
+<div class="content d-flex">
+    <div th:replace="~{fragments/menu :: left-menu}"></div>
+    <div class="w-100 d-flex mx-3 mt-4 align-items-center flex-column">
+        <div class="container-nav d-flex justify-content-center">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/detail/{courseId}(courseId=${course.courseID})}">Bài học</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/admin/member/{courseId}(courseId=${course.courseID})}">Thành viên</a>
+                </li>
+            </ul>
+        </div>
+        <div class="content-container d-flex justify-content-center">
+            <div class="content-left">
+                <input type="hidden" class="d-none" th:value="${course.courseID}"  id="courseId">
+                <h4 class="mt-2"><span th:text="${course.courseName}"></span></h4>
+                <div>
+                    Mã khóa học: <span th:text="${course.courseID}"></span>
+                </div>
+                <div class="d-flex mt-4 align-items-center">
+                    <h6 class="mb-0">Thành viên trong khóa học: </h6>
+                    <button class="btn btn-success btn-sm rounded ms-3" data-bs-toggle="modal" data-bs-target="#addStudentModal">Thêm</button>
+                </div>
+
+                <div class="member-list mt-3">
+                    <th:block th:each="enroll : ${course.enrollments}">
+                        <div class="member-item d-flex align-items-center">
+                            <div class="col-10 d-flex justify-content-around">
+                                <img th:src="@{{imgLink}(imgLink=${enroll.user.avatar})}" width="25px" height="25px">
+                                <div th:text="${enroll.user.fullName}"></div>
+                                <div th:text="${enroll.user.email}"></div>
+                                <div th:text="${enroll.processPoint}"></div>
+                                <div th:text="${enroll.accessType}"></div>
+                            </div>
+                            <div class="col-2 d-flex justify-content-center" style="gap: 10px">
+                                <th:block th:if="${enroll.accessType.toString() == 'PENDING'}">
+                                    <button class="btn btn-success" th:attr="onclick=|acceptMember('${enroll.user.userId}')|">Chấp nhận</button>
+                                </th:block>
+                                <th:block th:if="${enroll.accessType.toString() == 'ACCEPT'}">
+                                    <button class="btn btn-danger" th:attr="onclick=|removeMember('${enroll.user.userId}')|">Xóa</button>
+                                </th:block>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+            <div class="content-right mt-4">
+                <div class="container_right_video">
+                    <input type="file" name="uploadfile" id="img" class="d-none" accept="image/png, image/gif, image/jpeg"/>
+                    <label for="img">
+                        <img id="imgPreview" class="img-fluid img-select" th:src="${course.courseAvt}" alt="Hình ảnh" style="aspect-ratio: 16/9; border-radius: 10px; width: 100%">
+                    </label>
+                </div>
+                <div class="course_information">
+                    <div>
+                        Giảng viên: <span th:text="${course.courseOwner.fullName}"></span>
+                    </div>
+                    <div>
+                        Khoa: <span th:text="${course.department.departmentName}"></span>
+                    </div>
+                    <div>
+                        Tổng số: <span class="total" th:text="${#lists.size(chapters)}"></span> bài học
+                    </div>
+                    <div>
+                        Tài liệu tham khảo: <span th:text="${#lists.size(course.listDocuments)}"></span> tài liệu
+                    </div>
+                    <div>
+                        Học viên: <span th:text="${#lists.size(course.enrollments)}"></span> học viên
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--    Modal thêm học viên -->
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="formAddStudent">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Thêm học viên</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="studentInput" class="form-label">Tìm kiếm học viên: </label>
+                            <div class="d-flex">
+                                <input type="text" class="form-control w-100" id="studentInput" placeholder="">
+                                <button class="btn btn-primary ms-3" id="searchBtn">Tìm</button>
+                            </div>
+
+                            <div class="bg-light p-3 mt-2" style="width:100%; border-radius: 8px">
+                                <h6>Danh sách người dùng</h6>
+                                <div id="list-user" class="list-user d-flex flex-column" style="overflow-y: auto; max-height: 200px; min-height:200px; gap: 10px">
+<!--                                    <div class="user-item-search">-->
+<!--                                        Huỳnh Khánh Duy (huykhaduy@gmail.com)-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--    Modal sửa chapter -->
+<!--    <div class="modal fade" id="editChapterModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--        <div class="modal-dialog modal-dialog-centered">-->
+<!--            <div class="modal-content">-->
+<!--                <form id="formEditChapter">-->
+<!--                    <input type="hidden" class="d-none" id="editChapterId">-->
+<!--                    <div class="modal-header">-->
+<!--                        <h1 class="modal-title fs-5">Sửa nội dung</h1>-->
+<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                    </div>-->
+<!--                    <div class="modal-body">-->
+<!--                        <div class="mb-3">-->
+<!--                            <label class="form-label">Tên bài học</label>-->
+<!--                            <input type="text" class="form-control" id="editChapterTitle" placeholder="">-->
+<!--                        </div>-->
+<!--                        <div class="mb-3">-->
+<!--                            <label class="form-label">Video của bài học</label>-->
+<!--                            <input type="file" class="form-control" id="editChapterVideo" placeholder="">-->
+<!--                            <input type="text" class="form-control mt-2" id="editYoutubeUrl" placeholder="Hoặc link video">-->
+<!--                        </div>-->
+<!--                        <div class="mb-3">-->
+<!--                            <label class="form-label">Nội dung khóa học</label>-->
+<!--                            <input type="text" class="form-control" id="editChapterContent">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="modal-footer">-->
+<!--                        <button type="submit" class="btn btn-success" id="btnEditChapter">Xác nhận</button>-->
+<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash;    Modal thêm file&ndash;&gt;-->
+<!--    <div class="modal fade" id="addFileCourse" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--        <div class="modal-dialog modal-dialog-centered">-->
+<!--            <div class="modal-content">-->
+<!--                <form id="formAddFile">-->
+<!--                    <input type="hidden" class="d-none" id="fileCourseId">-->
+<!--                    <div class="modal-header">-->
+<!--                        <h1 class="modal-title fs-5">Thêm file</h1>-->
+<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                    </div>-->
+<!--                    <div class="modal-body">-->
+<!--                        <div class="mb-3">-->
+<!--                            <label class="form-label">Tải lên file</label>-->
+<!--                            <input type="file" class="form-control" id="fileId">-->
+<!--                        </div>-->
+<!--                        <div class="mb-3">-->
+<!--                            <label class="form-label">Hoặc chọn file có sẵn</label>-->
+<!--                            <select class="form-control" id="selectFiles">-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="modal-footer">-->
+<!--                        <button type="submit" class="btn btn-success" id="btnAddFile">Xác nhận</button>-->
+<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+<script th:src="@{/js/header.js}"></script>
+<script th:src="@{/js/admin_course_member.js}"></script>
+</body>
+</html>

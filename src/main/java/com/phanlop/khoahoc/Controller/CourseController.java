@@ -245,6 +245,7 @@ public class CourseController {
             enrollment.setId(enrollmentId);
             enrollment.setCourse(course);
             enrollment.setUser(user);
+            enrollment.setAccessType(AccessType.ACCEPT);
             enrollmentServices.saveEnrollment(enrollment);
             return ObjectMapperUtils.mapAll(course.getEnrollments().stream().map(Enrollment::getUser).toList(), DetailUserDTO.class);
         }

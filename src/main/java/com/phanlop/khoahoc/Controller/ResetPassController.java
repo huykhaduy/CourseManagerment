@@ -24,12 +24,21 @@ public class ResetPassController {
         if(passNew.equals(passnewReplace)){
             OTP otp = (OTP) session.getAttribute("otp");
             User user = userServices.getUserByUserName(otp.getEmail());
+            boolean isCorrect = false;
+            try {
+                isCorrect = (boolean) session.getAttribute("isCorrect");
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Bạn không có quyền đổi mật khẩu !");
+            }
 
-            userServices.resetPassword(user, passNew);
-
-            return ResponseEntity.ok("Đặt lại mật khẩu thành công.");
-        } else
-            return ResponseEntity.badRequest().body("Mật khẩu nhập lại không khớp!");
+            if (isCorrect){
+                userServices.resetPassword(user, passNew);
+                return ResponseEntity.ok("Đặt lại mật khẩu thành công.");
+            } else {
+                return ResponseEntity.badRequest().body("Bạn không có quyền đổi mật khẩu !");
+            }
+        }
+        return ResponseEntity.badRequest().body("Mật khẩu nhập lại không khớp!");
     }
 
     @GetMapping("/reset")
