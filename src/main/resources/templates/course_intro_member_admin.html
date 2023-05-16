@@ -49,7 +49,7 @@
                     <button class="btn btn-success btn-sm rounded ms-3" data-bs-toggle="modal" data-bs-target="#addStudentModal">Thêm</button>
                 </div>
 
-                <div class="member-list mt-3">
+                <div class="member-list mt-3 d-flex flex-column" style="gap: 20px">
                     <th:block th:each="enroll : ${course.enrollments}">
                         <div class="member-item d-flex align-items-center">
                             <div class="col-10 d-flex justify-content-around">

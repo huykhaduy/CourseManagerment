@@ -10,6 +10,7 @@ import com.phanlop.khoahoc.Service.DiscussServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,7 +55,9 @@ public class DiscussServicesImpl implements DiscussServices {
 
     @Override
     public List<InboxDTO> fillterBySearch(User user, String search) {
-        List<InboxDTO> list = findAllInboxByUser(user);
+        List<InboxDTO> list = new ArrayList<>(findAllInboxByUser(user));
+        if (search.isEmpty() || search.isBlank())
+            return list;
         list.removeIf(c -> !c.getCourseName().contains(search));
         return list;
     }

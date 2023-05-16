@@ -189,7 +189,7 @@ function formattedDatetime(date) {
 // }
 $("#input_search_bar").on('input',(function(){
     let inputValue =  $("#input_search_bar").val();
-    if (inputValue !== ""){
+    // if (inputValue !== ""){
         $.ajax({
             url: "/discuss/search",
             method: "GET",
@@ -217,10 +217,10 @@ $("#input_search_bar").on('input',(function(){
                 console.log("fail");
             }
         });
-    }
-    else {
-        $("#popup-search-box").css("display", "none");
-    }
+    // }
+    // else {
+    //     $("#popup-search-box").css("display", "none");
+    // }
 }));
 
 messageForm.addEventListener('submit', sendMessage, true)
