@@ -1,7 +1,9 @@
 package com.phanlop.khoahoc.Controller;
 
 import com.phanlop.khoahoc.DTO.UserDTO;
+import com.phanlop.khoahoc.Entity.Role;
 import com.phanlop.khoahoc.Entity.User;
+import com.phanlop.khoahoc.Repository.RoleRepository;
 import com.phanlop.khoahoc.Service.UserServices;
 import com.phanlop.khoahoc.Utils.ObjectMapperUtils;
 import jakarta.validation.Valid;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SignUpController {
     private final UserServices userServices;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @GetMapping
     public String getSignUpPage(Model model){
@@ -38,6 +41,11 @@ public class SignUpController {
             User user = ObjectMapperUtils.map(userDTO, User.class);
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             userServices.saveUser(user);
+            Role studentRole = roleRepository.findByRoleName("ROLE_STUDENT");
+            studentRole.getListUsers().add(user);
+            user.getListRoles().add(studentRole);
+            roleRepository.save(studentRole);
+
             return new ModelAndView("redirect:/login");
         }
         else {
