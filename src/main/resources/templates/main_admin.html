@@ -14,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/menu.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
@@ -29,7 +30,7 @@
             <div class="d-flex justify-content-between mb-3">
                 <div class="d-flex" style="gap: 20px">
                     <h4>Khóa học của bạn đã tạo</h4>
-                    <button class="btn btn-success">Thêm khóa học</button>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCourseModal">Thêm khóa học</button>
                 </div>
 
                 <form method="get">
@@ -56,12 +57,12 @@
                 <th:block th:each="course : ${courses}">
                     <div class="course-item position-relative">
                         <div class="dropdown position-absolute" style="top: 10px; right: 10px">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-three-dots-vertical"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Sửa</a></li>
-                                <li><a class="dropdown-item" href="#">Xóa</a></li>
+                                <li><a class="dropdown-item" href="#" th:attr="onclick=|openEditCourseModal('${course.courseID}')|">Sửa</a></li>
+                                <li><a class="dropdown-item" href="#" th:attr="onclick=|removeCourse('${course.courseID}')|">Xóa</a></li>
                             </ul>
                         </div>
                         <a th:href="@{/admin/detail/{id}(id=${course.courseID})}">
@@ -73,7 +74,7 @@
                 </th:block>
             </div>
 
-            <th:block th:if="${not #lists.isEmpty(courses)}">
+            <th:block th:if="${not #lists.isEmpty(courses) && #lists.size(courses) > 1}">
                 <nav class="mt-3 d-flex justify-content-center align-items-center">
                     <ul class="pagination">
                         <li class="page-item"><a class="page-link" th:href="@{'?khoa=' + ${khoaId} + '&page=' + ${currentPage - 1 < 1 ? 1 : currentPage - 1}}">Trước</a></li>
@@ -90,6 +91,82 @@
         </div>
 
     </div>
+
+    <!--    Modal add khóa học-->
+    <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="formAddCourse">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm khóa học mới</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="courseName" class="form-label">Tên khóa học</label>
+                            <input type="text" class="form-control" id="courseName" placeholder="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseDes" class="form-label">Mô tả khóa học</label>
+                            <input type="text" class="form-control" id="courseDes" placeholder="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseAvt" class="form-label">Ảnh đại diện</label>
+                            <input type="file" class="form-control" id="courseAvt" accept="image/png, image/gif, image/jpeg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="departmentId" class="form-label">Khoa của khóa học</label>
+                            <select class="form-select" aria-label="Default select example" id="departmentId">
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Thêm</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--    Modal edit khóa học-->
+    <div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="formEditCourse">
+                    <input type="hidden" class="d-none" value="" name="courseID" id="editCourseId">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Sửa khóa học</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="editCourseName" class="form-label">Tên khóa học</label>
+                            <input type="text" class="form-control" id="editCourseName" placeholder="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCourseDes" class="form-label">Mô tả khóa học</label>
+                            <input type="text" class="form-control" id="editCourseDes" placeholder="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCourseAvt" class="form-label">Ảnh đại diện</label>
+                            <input type="file" class="form-control" id="editCourseAvt" accept="image/png, image/gif, image/jpeg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDepartmentId" class="form-label">Khoa của khóa học</label>
+                            <select class="form-select" aria-label="Default select example" id="editDepartmentId">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning" id="btnEditCourse">Sửa</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -97,5 +174,6 @@
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
 <script th:src="@{/js/header.js}"></script>
+<script th:src="@{/js/main_admin.js}"></script>
 </body>
 </html>

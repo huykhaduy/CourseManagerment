@@ -1,0 +1,106 @@
+.wrapperScreen{
+    display: flex;
+    margin-top: 10px;
+    padding: 0px 2% 0px 3%;
+    width: 100%;
+}
+
+.left-screen {
+    width: 60%;
+    box-sizing: border-box;
+    display: flex;  
+  }
+  
+.right-screen {
+    width: 40%;
+    box-sizing: border-box;
+}
+
+.iconLeft{
+    width: 8%;
+    padding-top: 5px;
+  
+   
+}
+
+i.bi-file-text {
+    display: inline-block; /* hiển thị như một khối để có thể đặt kích thước */
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* tạo background tròn */
+    background-color: #F05123; /* màu nền của background */
+    color: #fff;
+    font-size: 23px; /* thay đổi kích thước của icon bên trong */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.linestraight{
+    margin-top: 15px;
+      border-bottom: 2px solid #F05123;
+
+}
+
+.linestraight2{
+    margin-top: 15px;
+      border-bottom: 1px solid #000000;
+
+}
+
+/*1000px*/
+
+/*Right of file*/
+.component-file{
+    margin: 20px;
+    margin-left: 50px;
+    background-color: #ffffff;
+    width: 70%;
+    height: 200px;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+ 
+}
+
+.text-file{
+    font-family: "Google Sans",Roboto,Arial,sans-serif;
+    padding-top: 18px;
+    padding-left: 23px;
+    font-size: 22px;
+    font-weight: 400;
+}
+
+
+input[type=file]::file-selector-button {
+  width: 50%; 
+  margin-top: 25px;   
+  margin-left: 23px;
+  border: none;
+  background: #ce9382;
+  padding: 5px 5px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #eb3300;
+}
+
+#btnNopFile {
+  background-color: #ce9382;
+  color: white;
+  padding: 8px 13px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 35px;  
+  margin-left: 23px;
+  width: 85%;  
+}
+
+#btnNopFile:hover {
+  background-color: #eb3300;
+}

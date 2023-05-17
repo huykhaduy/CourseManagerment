@@ -22,6 +22,8 @@ public class FileServicesImpl implements FileServices {
 
     @Override
     public File addFile(MultipartFile multipartFile) {
+        if (multipartFile == null)
+            return null;
         File file = new File();
         String filePath = storeFileToMachine(multipartFile);
         file.setFileName(multipartFile.getOriginalFilename());

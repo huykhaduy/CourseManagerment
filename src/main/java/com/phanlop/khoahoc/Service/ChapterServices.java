@@ -11,4 +11,5 @@ public interface ChapterServices {
     Chapter saveChapter(Chapter chapter);
     void deleteChapter(int chapterId);
     List<Chapter> getChaptersByCourse(Course course);
+    int getMaxSortOfCourse(Course course);
 }

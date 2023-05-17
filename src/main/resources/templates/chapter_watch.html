@@ -25,10 +25,15 @@
 <div class="content d-flex">
     <div th:replace="~{fragments/menu :: left-menu}"></div>
     <div class="w-100 d-flex mx-auto mt-4">
-        <div class="chapter-wrapper d-flex">
-            <div class="chapter-section px-5">
-                <div class="video-container">
-                    <iframe class="responsive-iframe" th:src="${chapter.chapterVideo}" allowfullscreen style=""></iframe>
+        <div class="chapter-wrapper d-flex w-100">
+            <div class="chapter-section px-5 w-100">
+                <div class="video-container w-100">
+                    <th:block th:if="${isYoutube}">
+                        <iframe class="responsive-iframe" th:src="${chapter.chapterVideo}" allowfullscreen style=""></iframe>
+                    </th:block>
+                    <th:block th:unless="${isYoutube}">
+                        <video class="responsive-iframe" th:src="${chapter.chapterVideo}" type="video/mp4" controls></video>
+                    </th:block>
                 </div>
                 <h5 class="title mt-4">
                     <span th:text="${chapter.chapterTitle}"></span>

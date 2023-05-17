@@ -71,9 +71,9 @@ public class CourseServicesImpl implements CourseServices {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Department department = departmentRepository.findById(departmentId).orElse(null);
         if (department == null) {
-            return courseRepository.findCourseByCourseOwner(user, pageable);
+            return courseRepository.findCourseByCourseOwnerOrderByCreateDateDesc(user, pageable);
         }
-        return courseRepository.findCourseByCourseOwnerAndDepartment(user, department, pageable);
+        return courseRepository.findCourseByCourseOwnerAndDepartmentOrderByCreateDateDesc(user, department, pageable);
     }
 
     @Override

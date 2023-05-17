@@ -10,4 +10,6 @@ public interface UserServices {
     User saveUser(User user);
     void deleteUser(Long userId);
     User getUserByUserName(String username);
+    void resetPassword(User user, String newPassword);
+    List<User> searchStudents(String keywords);
 }

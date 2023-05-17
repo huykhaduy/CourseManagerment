@@ -90,6 +90,17 @@ public class HomeController {
         return "course_intro_admin";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER', 'ROLE_ADMIN')")
+    @GetMapping("/admin/member/{courseId}")
+    public String getCourseMember(@PathVariable String courseId, Model model) {
+        Course myCourse = courseService.getCourseById(UUID.fromString(courseId));
+        model.addAttribute("course", myCourse);
+        List<Chapter> chapters = new ArrayList<>(myCourse.getListChapters().stream().toList());
+        chapters.sort(Comparator.comparing(Chapter::getChapterSort));
+        model.addAttribute("chapters", chapters);
+        return "course_intro_member_admin";
+    }
+
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/detail/{courseId}/chapter/{chapterId}")
     public String getChapterView(@PathVariable Integer chapterId, @PathVariable String courseId, Model model){
@@ -98,7 +109,11 @@ public class HomeController {
         if (chapter != null && course != null){
             List<Chapter> chapters = new ArrayList<>(course.getListChapters().stream().toList());
             chapters.sort(Comparator.comparing(Chapter::getChapterSort));
-            System.out.println(chapters);
+            if (chapter.getChapterVideo().contains("youtube.com/embed/")){
+                model.addAttribute("isYoutube", true);
+            } else {
+                model.addAttribute("isYoutube", false);
+            }
             model.addAttribute("chapter", chapter);
             model.addAttribute("course", course);
             model.addAttribute("chapters", chapters);

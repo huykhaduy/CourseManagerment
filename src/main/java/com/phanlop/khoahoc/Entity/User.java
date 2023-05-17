@@ -47,6 +47,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Submit> selfSubmit = new HashSet<>();
 
+    // Khóa ngoại cho file
+    @OneToMany(mappedBy = "uploadedUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<File> uploadFiles = new HashSet<>();
+
     // Khóa ngoại cho Discuss
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Discuss> listDiscuss = new HashSet<>();

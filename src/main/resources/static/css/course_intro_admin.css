@@ -10,3 +10,49 @@
     right: 0;
     background-color: black;
 }
+
+.remove-icon{
+    right: -10px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    background: red;
+    align-items: center;
+    line-height: 20px;
+    justify-content: center;
+    border-radius: 50px;
+    font-size: 10px;
+    color: white;
+    user-select: none;
+    cursor: pointer;
+}
+
+.content-container{
+    width: 100%;
+}
+
+.content-left{
+    width: 60%;
+}
+
+.content-right{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.member-item{
+    padding: 5px 0px;
+    border-radius: 5px;
+    border: 1px solid #dedede;
+}
+
+.user-item-search{
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    background-color: white;
+}
