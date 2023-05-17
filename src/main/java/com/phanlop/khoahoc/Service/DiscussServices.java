@@ -12,6 +12,8 @@ public interface DiscussServices {
     public List<Discuss> findAllByCourse(Course course);
     public void save(Discuss discuss);
     public List<InboxDTO> findAllInboxByUser(User user);
+    public List<InboxDTO> findAllInboxByAdmin(User user);
     public List<DiscussDTO> findAllDiscussDTOByCourse(Course course);
     public List<InboxDTO> fillterBySearch(User user, String search);
+    public List<InboxDTO> filterBySearchAdmin(User admin, String search);
 }

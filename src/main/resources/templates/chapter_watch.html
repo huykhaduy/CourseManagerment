@@ -46,7 +46,7 @@
                     <th:block th:each="chapter : ${chapters}">
                         <a class="card" th:href="@{/detail/{courseId}/chapter/{chapterId}(courseId=${course.courseID}, chapterId=${chapter.chapterId})}"
                            style="width: 100%;">
-                            <img th:src="${course.courseAvt}" class="card-img-top img-fuild w-100" style="aspect-ratio: 16/9">
+                            <img th:src="${course.courseAvt}" class="card-img-top img-fuild w-100" style="aspect-ratio: 16/9; max-width:400px">
                             <div class="card-body">
                                 <p class="card-text" th:text="${chapter.chapterTitle}"></p>
                             </div>

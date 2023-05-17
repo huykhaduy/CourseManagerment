@@ -14,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" th:href="@{/css/header.css}">
     <link rel="stylesheet" th:href="@{/css/menu.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
@@ -72,13 +73,44 @@
                 </nav>
             </th:block>
         </div>
-
     </div>
 </div>
-
+<!-- Modal -->
+<div class="modal fade" id="joinCourse" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4 class="modal-title fs-5 mb-3">Tham gia vào khóa học</h4>
+                <div class="mb-3">
+                    <label for="maKhoaHoc" class="form-label">Mã khóa học: </label>
+                    <input type="text" class="form-control" id="maKhoaHoc" placeholder="Mã khóa học">
+                </div>
+                <div class="d-flex justify-content-end" style="gap: 10px">
+                    <button class="btn btn-primary" id="joinBtn">Tham gia</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    $("#joinBtn").click(function(){
+        $.ajax({
+            url: "/course/joinRequest",
+            method: "POST",
+            data: {
+                courseId: $("#maKhoaHoc").val(),
+            },
+            success: function(res){
+                Swal.fire('Thành công', res, 'success').then(()=> location.reload());
+            },
+            error: function(xhr){
+                Swal.fire('Thất bại!', xhr.responseText, 'error');
+            }
+        })
+    })
 </script>
 <script th:src="@{/js/header.js}"></script>
 </body>

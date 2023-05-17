@@ -12,6 +12,7 @@ import com.phanlop.khoahoc.Service.CourseServices;
 import com.phanlop.khoahoc.Service.DiscussServices;
 import com.phanlop.khoahoc.Service.EnrollmentServices;
 import com.phanlop.khoahoc.Service.UserServices;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -72,10 +73,13 @@ public class DisussController {
 
 
     @GetMapping("/discuss")
-    public String getChatPage(Model model, Authentication authentication) {
+    public String getChatPage(Model model, Authentication authentication, HttpServletRequest request) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userServices.getUserByUserName(userDetails.getUsername());
-        List<InboxDTO> listInbox = discussServices.findAllInboxByUser(user);
+        List<InboxDTO> listInbox;
+        if (request.isUserInRole("ROLE_ADMIN"))
+            listInbox = discussServices.findAllInboxByAdmin(user);
+        else listInbox = discussServices.findAllInboxByUser(user);
         model.addAttribute("title", "Thảo luận");
         model.addAttribute("inboxes", listInbox);
         return "discuss";
@@ -83,10 +87,13 @@ public class DisussController {
 
     @GetMapping("/discuss/{courseID}")
     public String getChatPageDetail(Model model, @PathVariable String courseID,
-                                    Authentication authentication) {
+                                    Authentication authentication, HttpServletRequest request) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userServices.getUserByUserName(userDetails.getUsername());
-        List<InboxDTO> listInbox = discussServices.findAllInboxByUser(user);
+        List<InboxDTO> listInbox;
+        if (request.isUserInRole("ROLE_ADMIN"))
+            listInbox = discussServices.findAllInboxByAdmin(user);
+        else listInbox = discussServices.findAllInboxByUser(user);
         Course course = courseServices.getCourseById(UUID.fromString(courseID));
         List<DiscussDTO> discussions = discussServices.findAllDiscussDTOByCourse(course);
 
@@ -117,17 +124,22 @@ public class DisussController {
     }
     @GetMapping("/discuss/getInbox")
     @ResponseBody
-    public List<InboxDTO> getInbox(@RequestParam String id) {
+    public List<InboxDTO> getInbox(@RequestParam String id, HttpServletRequest request) {
         User user = userServices.getUserById(Long.parseLong(id));
-        List<InboxDTO> list = discussServices.findAllInboxByUser(user);
-        return list;
+        List<InboxDTO> list;
+        if (request.isUserInRole("ROLE_ADMIN"))
+            return discussServices.findAllInboxByAdmin(user);
+        return discussServices.findAllInboxByUser(user);
     }
 
     @GetMapping("/discuss/search")
     @ResponseBody
-    public List<InboxDTO> searchInbox(Authentication authentication, @Param("text") String text) {
+    public List<InboxDTO> searchInbox(Authentication authentication, @Param("text") String text, HttpServletRequest request) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         User user = userServices.getUserByUserName(userDetails.getUsername());
+        if (request.isUserInRole("ROLE_ADMIN")){
+            return discussServices.filterBySearchAdmin(user, text);
+        }
         return discussServices.fillterBySearch(user, text);
     }
 }

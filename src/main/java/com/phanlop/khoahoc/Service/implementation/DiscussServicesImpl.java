@@ -39,6 +39,16 @@ public class DiscussServicesImpl implements DiscussServices {
     }
 
     @Override
+    public List<InboxDTO> findAllInboxByAdmin(User user){
+        List<InboxDTO> list = discussRepository.getCourseDiscussForAdmin(user)
+                .stream().map(i -> {
+                    i.setMessage((i.getMessage() == null) ? "Không có tin nhắn" : i.getMessage());
+                    return i;
+                }).toList();
+        return list;
+    }
+
+    @Override
     public List<DiscussDTO> findAllDiscussDTOByCourse(Course course) {
         List<DiscussDTO> discussions = findAllByCourse(course).stream()
                 .map(d -> {
@@ -56,6 +66,14 @@ public class DiscussServicesImpl implements DiscussServices {
     @Override
     public List<InboxDTO> fillterBySearch(User user, String search) {
         List<InboxDTO> list = new ArrayList<>(findAllInboxByUser(user));
+        if (search.isEmpty() || search.isBlank())
+            return list;
+        list.removeIf(c -> !c.getCourseName().contains(search));
+        return list;
+    }
+
+    public List<InboxDTO> filterBySearchAdmin(User user, String search){
+        List<InboxDTO> list = new ArrayList<>(findAllInboxByAdmin(user));
         if (search.isEmpty() || search.isBlank())
             return list;
         list.removeIf(c -> !c.getCourseName().contains(search));

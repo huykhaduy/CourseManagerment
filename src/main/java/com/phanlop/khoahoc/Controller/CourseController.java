@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -171,6 +172,38 @@ public class CourseController {
         return ResponseEntity.ok(ObjectMapperUtils.map(chapter, ChapterDTO.class));
     }
 
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @PostMapping("/joinRequest")
+    public ResponseEntity<String> joinCourse(@RequestParam String courseId, Authentication authentication){
+        Course course = null;
+        try {
+            course = courseServices.getCourseById(UUID.fromString(courseId));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body("Mã khóa học không đúng định dạng");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userServices.getUserByUserName(userDetails.getUsername());
+        if (course != null && user != null){
+            Enrollment enroll = enrollmentServices.getEnrollmentByUserAndCourse(user, course);
+            if (enroll == null){
+                Enrollment.EnrollmentId enrollmentId = new Enrollment.EnrollmentId();
+                enrollmentId.setUserId(user.getUserId());
+                enrollmentId.setCourseId(course.getCourseID());
+                Enrollment enrollment = new Enrollment();
+                enrollment.setId(enrollmentId);
+                enrollment.setUser(user);
+                enrollment.setAccessType(AccessType.PENDING);
+                enrollment.setCourse(course);
+                enrollmentServices.saveEnrollment(enrollment);
+                return ResponseEntity.ok("Đã gửi yêu cầu tham gia khóa học! Vui lòng chờ duyệt");
+            } else {
+                return ResponseEntity.badRequest().body("Bạn đã gửi yêu cầu cho người sở hữu hoặc đã tham gia khóa học này");
+            }
+        }
+        return ResponseEntity.badRequest().body("Khóa học yêu cầu không tồn tại!");
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER')")
     @PostMapping("/file/add/{courseId}")
     public ResponseEntity<FileDTO> addFileToCourse(@ModelAttribute MultipartFile fileUpload, @PathVariable UUID courseId, Authentication authentication){
@@ -238,15 +271,22 @@ public class CourseController {
         Course course = courseServices.getCourseById(courseId);
         User user = userServices.getUserById(userId);
         if (course != null && user != null){
-            Enrollment enrollment = new Enrollment();
-            Enrollment.EnrollmentId enrollmentId = new Enrollment.EnrollmentId();
-            enrollmentId.setCourseId(course.getCourseID());
-            enrollmentId.setUserId(user.getUserId());
-            enrollment.setId(enrollmentId);
-            enrollment.setCourse(course);
-            enrollment.setUser(user);
-            enrollment.setAccessType(AccessType.ACCEPT);
-            enrollmentServices.saveEnrollment(enrollment);
+            Enrollment enroll = enrollmentServices.getEnrollmentByUserAndCourse(user, course);
+            if (enroll == null){
+                Enrollment enrollment = new Enrollment();
+                Enrollment.EnrollmentId enrollmentId = new Enrollment.EnrollmentId();
+                enrollmentId.setCourseId(course.getCourseID());
+                enrollmentId.setUserId(user.getUserId());
+                enrollment.setId(enrollmentId);
+                enrollment.setCourse(course);
+                enrollment.setUser(user);
+                enrollment.setAccessType(AccessType.ACCEPT);
+                enrollmentServices.saveEnrollment(enrollment);
+            }
+            else {
+                enroll.setAccessType(AccessType.ACCEPT);
+                enrollmentServices.saveEnrollment(enroll);
+            }
             return ObjectMapperUtils.mapAll(course.getEnrollments().stream().map(Enrollment::getUser).toList(), DetailUserDTO.class);
         }
         return Collections.emptyList();
