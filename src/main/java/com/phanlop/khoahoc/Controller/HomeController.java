@@ -120,4 +120,10 @@ public class HomeController {
         }
         return "chapter_watch";
     }
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_STUDENT')")
+    @GetMapping("/account_info")
+    public String accountInfo() {
+        // Do something to get account info
+        return "account_info";
+    }
 }

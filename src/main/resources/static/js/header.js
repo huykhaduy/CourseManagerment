@@ -68,5 +68,21 @@ $("#input-admin-search-box").on('input',(function(){
         $("#popup-admin-search-box").css("display", "none");
     }
 }));
+var btnEdit = document.getElementById("btn-edit");
+var btnChange = document.getElementById("btn-change");
+var editForm = document.getElementById("edit-form");
+var changeForm = document.getElementById("change-form");
+
+btnEdit.addEventListener("click", function() {
+    if (changeForm.classList.contains("show")) {
+        changeForm.classList.remove("show");
+    }
+});
+
+btnChange.addEventListener("click", function() {
+    if (editForm.classList.contains("show")) {
+        editForm.classList.remove("show");
+    }
+});
 
 
