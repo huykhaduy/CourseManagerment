@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello boy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel = "icon" th:href="@{/img/f9.png}" type = "image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/menu.css}">
+    <link rel="stylesheet" th:href="@{/css/course_intro.css}">
+    <link rel="stylesheet" th:href="@{/css/course_intro_admin.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/header}"></div>
+<div class="content d-flex">
+    <div th:replace="~{fragments/menu :: left-menu}"></div>
+    <div class="w-100 d-flex mx-3 mt-4 align-items-center flex-column">
+        <div class="container-nav d-flex justify-content-center">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/detail/{courseId}(courseId=${course.courseID})}">Bài học</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/admin/assignment/{courseID}(courseID=${course.courseID})}">Bài tập</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/member/{courseId}(courseId=${course.courseID})}">Thành viên</a>
+                </li>
+            </ul>
+        </div>
+        <div class="content-container d-flex justify-content-center">
+          <div class="content-left">
+              <h4 class="mt-2"><span th:text="${course.courseName}"></span></h4>
+              <div>
+                  Mã khóa học: <span th:text="${course.courseID}"></span>
+              </div>
+              <div class="mt-4 d-flex justify-content-between align-items-center">
+                  <h5 class="mb-0">Danh sách bài tập</h5>
+                  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_modal">Tạo</button>
+              </div>
+              <div class="accordion mt-4" id="accordionExample">
+                <div class="accordion-item" th:each="assignment : ${assignments}">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button d-flex overflow-x-auto collapsed" type="button" data-bs-toggle="collapse" th:data-bs-target="'#' + ${assignment.assignId}" aria-expanded="false" aria-controls="'#' + ${assignment.assignId}">
+                      <div th:text="${assignment.assignTitle}" class="w-75 fs-5">Bài tập</div>
+                      <div th:if="${assignment.deadline == null}" th:text="'Đăng vào: ' + ${#dates.format(assignment.createdDate, 'HH:mm | dd-MM-yyyy')}" class="flex-shrink-1 w-25 text-end pe-1" style="font-size: 12px;">Đăng vào: 09:30 | 17/05/2023</div>
+                      <div th:unless="${assignment.deadline == null}" th:text="'Hạn nộp: ' + ${#dates.format(assignment.deadline, 'HH:mm | dd-MM-yyyy')}" class="flex-shrink-1 w-25 text-end pe-1" style="font-size: 12px;">Hạn nộp: 09:30 | 17/05/2023</div>
+                    </button>
+                  </h2>
+                  
+                  <div th:id="${assignment.assignId}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div th:text="${assignment.assignDes}" class="accordion-body overflow-y-auto" style="max-height: 200px;">
+                      Chitiet    
+                    </div>
+                    <div class="pt-2 pb-2 border-top">
+                        <a role="button" class="btn btn-primary ms-2" th:href="@{/assignment/{courseId}/detail/{id}(courseId=${course.courseID} ,id=${assignment.assignId})}">Xem chi tiết</a>
+                        <button type="button" class="btn btn-primary ms-2" th:attr="onclick=|openEditModal('${assignment.assignId}')|">Chỉnh sửa</button>
+                        <button type="button" class="btn btn-primary ms-2" th:attr="onclick=|deleteAssignment('${assignment.assignId}')|">Xóa</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <div class="content-right mt-4">
+              <div class="container_right_video">
+                  <input type="file" name="uploadfile" id="img" class="d-none" accept="image/png, image/gif, image/jpeg"/>
+                  <label for="img">
+                      <img id="imgPreview" class="img-fluid img-select" th:src="${course.courseAvt}" alt="Hình ảnh" style="aspect-ratio: 16/9; border-radius: 10px; width: 100%">
+                  </label>
+              </div>
+              <div class="course_information">
+                  <div>
+                      Giảng viên: <span th:text="${course.courseOwner.fullName}"></span>
+                  </div>
+                  <div>
+                      Khoa: <span th:text="${course.department.departmentName}"></span>
+                  </div>
+                  <div>
+                      Tổng số: <span class="total" th:text="${#lists.size(chapters)}"></span> bài học
+                  </div>
+                  <div>
+                      Tài liệu tham khảo: <span th:text="${#lists.size(course.listDocuments)}"></span> tài liệu
+                  </div>
+                  <div>
+                      Học viên: <span th:text="${#lists.size(course.enrollments)}"></span> học viên
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal tạo bài tập-->
+  <div class="modal fade" id="add_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form id="formAdd" onsubmit="return false;">
+          <input type="hidden" class="d-none" th:value="${course.courseID}" name="courseId" id="courseId">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5">Tạo bài tập</h1>
+          </div>
+          <div class="modal-body">
+              <div class="mb-3">
+                  <label for="assignTitle" class="form-label">Tên bài tập</label>
+                  <input type="text" class="form-control" id="assignmentTitle" placeholder="">
+              </div>
+              <div class="mb-3">
+                <label for="#assignmentDes" class="form-label">Nội dung</label>
+                <textarea class="form-control" id="assignmentDes" rows="3"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Hạn nộp</label>
+                <input type="text" id="datetimeDeadline" class="form-control">
+              </div>
+              <div class="mb-3">
+                  <label for="assignFile" class="form-label">Tài liệu</label>
+                  <input type="file" class="form-control" id="assignmentFile" placeholder="">
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-success" id="btnAddAssignment">Tạo bài tập</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Modal sửa chức năng-->
+  <div class="modal fade" id="edit_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form id="formEdit">
+          <input type="hidden" class="d-none" id="editAssignmentId">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5">Sửa nội dung</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="mb-3">
+                  <label class="form-label">Tên bài tập</label>
+                  <input type="text" class="form-control" id="editAssignmentTitle" placeholder="">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Nội dung</label>
+                <input type="text" class="form-control" id="editAssignmentDes">
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Hạn nộp</label>
+                <input type="text" id="editDeadline" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label for="assignFile" class="form-label">Tài liệu</label>
+                <input type="file" class="form-control" id="assignmentFile" placeholder="">
+              </div>
+              <!-- <div class="d-flex justify-content-start align-items-center mb-3">
+                <h5 class="mb-0 me-3">Tài liệu tham khảo</h5>
+                <button class="btn btn-success btn-sm" th:attr="onclick=|openFileModal()|">
+                    Thêm
+                </button>
+
+                <div class="file-list"  style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <div class="d-flex justify-content-start align-items-center mt-4">
+                    <h5 class="mb-0 me-3">Tài liệu tham khảo</h5>
+                    <button class="btn btn-success btn-sm" th:attr="onclick=|openFileModal()|">
+                        Thêm
+                    </button>
+                  </div>
+                </div>
+              </div> -->
+          </div>
+          <div class="modal-footer">
+              <button type="submit" class="btn btn-success" id="btnEditAssignment">Xác nhận</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!--    Modal thêm file-->
+  <div class="modal fade" id="addFileCourse" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="formAddFile">
+                <input type="hidden" class="d-none" id="fileCourseId">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5">Thêm file</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tải lên file</label>
+                        <input type="file" class="form-control" id="fileId">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="btnAddFile">Xác nhận</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  </div>
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    flatpickr("#datetimeDeadline", {
+      enableTime: true,
+      dateFormat: "d-m-Y H:i",
+      minDate: "today",
+      confirmIcon: "<i class='fa fa-check'></i>", // your icon's html, if you wish to override
+      confirmText: "OK ",
+      showAlways: false,
+      theme: "light" // or "dark"
+    });
+</script>
+<script th:src="@{/js/header.js}"></script>
+<script th:src="@{/js/assignment.js}"></script>
+</body>
+</html>
