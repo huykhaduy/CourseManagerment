@@ -18,7 +18,7 @@ import java.util.UUID;
 public class FileServicesImpl implements FileServices {
     private final FileRepository fileRepository;
     private final static String filePath = "uploads/";
-    private final static String hostLink = "http://localhost:8080/uploads/";
+    private final static String hostLink = "/uploads/";
 
     @Override
     public File addFile(MultipartFile multipartFile) {

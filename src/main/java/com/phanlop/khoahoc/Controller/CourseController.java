@@ -39,6 +39,7 @@ public class CourseController {
     private final FileRepository fileRepository;
     private final AssignmentRepository assignmentRepository;
 
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/search")
     public List<CourseDTO> searchCourse(Authentication authentication, @Param("text") String text){
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
