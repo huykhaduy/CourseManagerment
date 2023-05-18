@@ -30,39 +30,46 @@
                     </div>
                     <div class="component-main" style="width: 92%;">
                         <div class="header-component-main">
-                            <div style="color: #F05123 ;font-size: 30px;font-weight: 500;">Bài tập tuần 1</div>
-                            <div style="color: #9a9a9a ;font-size: 18px;font-weight: 350;">Tên khóa học</div>
-                            <div style="color: #9a9a9a ;font-size: 18px;font-weight: 350;">Tên giáo viên</div>
+                            <div style="color: #F05123 ;font-size: 30px;font-weight: 500;" th:text="${assignment.assignTitle}"></div>
+                            <div style="color: #9a9a9a ;font-size: 18px;font-weight: 350;"><span th:text="'Tên khóa học: ' + ${courseName}"></span></div>
+                            <div style="color: #9a9a9a ;font-size: 18px;font-weight: 350;"><span th:text="'Tên giáo viên: ' + ${teacherName}"></span></div>
                             <div class="rowTime d-flex " style="justify-content: end;">
-                                <div style="padding-left: 20px;">Đến hạn: 30 thg 4 </div>
+                                <div style="padding-left: 20px; font-size: 13px;">
+                                    <span th:if="${assignment.deadline == null}">Không có hạn nộp</span>
+                                    <span th:unless="${assignment.deadline == null}" th:text="'Đến hạn: ' + ${#dates.format(assignment.deadline, 'HH:mm dd-MM-yyyy')}"></span>
+                                </div>
                             </div>
                             <div class="linestraight"></div>
                             <div style="margin-top: 20px; marigin-bottom: 20px">
-                               <div>Nội dung
+                                <h3>Nội dung</h3>
+                                <hr>
+                                <p th:text="${assignment.assignDes}"></p>
                             </div>
-                            <div class="linestraight2"></div>
+                            <div style="margin-top: 20px; marigin-bottom: 20px">
+                                <h3>Tài liệu tham khảo</h3>
+                                <hr>
+                                Không có :((
+                            </div>
 
                         </div>
                         
                     </div>       
                     
                 </div>
-                
-            </div>
-            <div class="right-screen">
-                <div class="component-file">
-                    <div class="text-file">Bài tập của bạn</div>
-                        <form action="">
-                            <input  type="file" id="file_homeword">
-                            <button id="btnNopFile"   type="submit">Xác nhận nộp</button>
-                        </form>
-                    </div>
-                   
-                    
+                <div class="right-screen">
+                    <div class="component-file">
+                        <div class="text-file">Bài tập của bạn</div>
+                            <form onsubmit="return false;">
+                                <input  type="file" id="file_homeword">
+                                <button id="btnNopFile" onclick="submit()">Xác nhận nộp</button>
+                            </form>
+                    </div> 
+                </div>
             </div>
         </div> 
     </div>  
 
   <script th:src="@{/js/header.js}"></script>
+  <script th:src="@{/js/assignment_detail.js}"></script>
 </body>
 </html>
